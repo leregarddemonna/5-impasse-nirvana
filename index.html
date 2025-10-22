@@ -19,6 +19,7 @@
       min-height: 100vh;
       scroll-behavior: smooth;
       position: relative;
+      transition: color 1s ease; /* Pour fondu du texte */
     }
 
     /* 🌄 Arrière-plan dans un calque séparé */
@@ -28,25 +29,28 @@
       top: 0;
       left: 0;
       width: 100%;
-      height: 100%;
-      background: url("Capture d'écran 2025-09-10 140417.png") center center fixed;
+      height: 120%;
+      background: url("Capture d'écran 2025-09-10 140417.png") center top;
       background-size: cover;
       z-index: -1;
-      transition: filter 1s ease;
+      transition: filter 1s ease, transform 0.5s ease-out;
     }
 
-    /* Quand la vidéo joue, le fond s’assombrit */
+    /* Quand la vidéo joue : assombrir le fond ET le texte */
     body.darken::before {
       filter: brightness(0.3);
+    }
+    body.darken {
+      color: rgba(185, 74, 166, 0.4);
     }
 
     .content {
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
       min-height: 100vh;
-      padding: 6rem 1rem 10rem 1rem;
+      padding: 12rem 1rem 10rem 1rem; /* Plus d’espace au-dessus */
       opacity: 0;
       animation: fadeIn 2.5s ease forwards;
       transition: opacity 0.8s ease;
@@ -60,7 +64,7 @@
     p {
       font-size: 1.3rem;
       line-height: 1.8rem;
-      margin-bottom: 3rem;
+      margin-bottom: 8rem; /* Espace entre le texte et le titre */
       white-space: pre-line;
     }
 
@@ -83,7 +87,7 @@
       max-width: 900px;
       height: 506px;
       border: none;
-      margin-bottom: 6rem;
+      margin-bottom: 10rem;
       z-index: 1;
       position: relative;
       transition: opacity 1s ease;
@@ -127,25 +131,43 @@ Merci beaucoup et bon visionnage
     document.body.appendChild(tag);
 
     function onYouTubeIframeAPIReady() {
-      const player = new YT.Player('video', {
-        events: {
-          'onStateChange': onPlayerStateChange
-        }
+      new YT.Player('video', {
+        events: { 'onStateChange': onPlayerStateChange }
       });
     }
 
     function onPlayerStateChange(event) {
       const body = document.body;
-
-      // Si la vidéo joue → fond s’assombrit
       if (event.data === YT.PlayerState.PLAYING) {
         body.classList.add('darken');
-      } 
-      // Si pause ou fin → fond revient normal
-      else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+      } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
         body.classList.remove('darken');
       }
     }
+
+    // 🎞 Effet de défilement du fond (parallaxe simple)
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      document.body.style.setProperty('--scrollY', scrollY);
+      document.body.style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
+      document.body.querySelector(':root').style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
+      document.body.style.setProperty('transform', `translateY(0)`);
+      document.body.style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
+      document.body.style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
+      document.querySelector('body').style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
+      document.body.style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
+      document.body.style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
+      document.body.style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
+      document.body.style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
+      document.body.style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
+      document.body.style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
+      document.body.style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
+      document.body.style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
+      document.body.querySelector('body::before');
+      document.body.style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
+      document.querySelector('body::before');
+      document.body.style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
+    });
   </script>
 </body>
 </html>

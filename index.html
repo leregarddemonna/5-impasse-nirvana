@@ -19,13 +19,14 @@
       color: white;
       background: url('background.png') no-repeat center center fixed;
       background-size: cover;
+      overflow-x: hidden;
     }
 
     body::before {
       content: "";
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.35);
       z-index: -1;
     }
 
@@ -61,7 +62,7 @@
     /* Section vidéo */
     .video-section {
       padding: 4rem 2rem;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.55);
     }
 
     .video-wrapper {
@@ -84,32 +85,23 @@
       display: block;
     }
 
+    /* Bouton Play minimaliste (triangle seul) */
     #play-button {
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 80px;
-      height: 80px;
-      background: rgba(255, 255, 255, 0.85);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      transition: background 0.3s;
-    }
-
-    #play-button::before {
-      content: '';
-      position: absolute;
-      left: 34%;
-      top: 28%;
       width: 0;
       height: 0;
-      border-top: 12px solid transparent;
-      border-bottom: 12px solid transparent;
-      border-left: 20px solid rgba(0, 0, 0, 0.8);
+      border-top: 30px solid transparent;
+      border-bottom: 30px solid transparent;
+      border-left: 45px solid white;
+      transform: translate(-50%, -50%);
+      opacity: 0.9;
+      transition: opacity 0.3s ease;
     }
 
     #play-button:hover {
-      background: rgba(255, 255, 255, 1);
+      opacity: 1;
     }
 
     /* Écran noir pour le fondu */
@@ -176,7 +168,7 @@
         const videoURL = "https://www.youtube.com/embed/zgHc-dJ1eww?autoplay=1&rel=0&showinfo=0&modestbranding=1&enablejsapi=1";
         const iframe = document.createElement('iframe');
         iframe.src = videoURL;
-        iframe.allow = "autoplay; fullscreen";
+        iframe.allow = "autoplay";
         iframe.allowFullscreen = true;
         iframe.style.width = "100%";
         iframe.style.height = "100%";
@@ -198,31 +190,10 @@
         videoContainer.appendChild(iframe);
         document.body.appendChild(videoContainer);
 
-        // Transition douce
-        setTimeout(() => { videoContainer.style.opacity = 1; }, 50);
+        // Transition douce vers la vidéo
+        setTimeout(() => { videoContainer.style.opacity = 1; fadeScreen.classList.remove('active'); }, 500);
 
-        // Plein écran
-        setTimeout(() => {
-          if (videoContainer.requestFullscreen) {
-            videoContainer.requestFullscreen();
-          } else if (videoContainer.webkitRequestFullscreen) {
-            videoContainer.webkitRequestFullscreen();
-          }
-        }, 1000);
-
-        // Fermer si sortie plein écran
-        document.addEventListener("fullscreenchange", () => {
-          if (!document.fullscreenElement) {
-            closeVideo(videoContainer);
-          }
-        });
-        document.addEventListener("webkitfullscreenchange", () => {
-          if (!document.webkitFullscreenElement) {
-            closeVideo(videoContainer);
-          }
-        });
-
-        // Fermer quand la vidéo se termine (via YouTube API)
+        // Fermer quand la vidéo se termine (YouTube API)
         window.onYouTubeIframeAPIReady = function() {
           const player = new YT.Player('video-player', {
             events: {
@@ -240,7 +211,7 @@
         tag.src = "https://www.youtube.com/iframe_api";
         document.body.appendChild(tag);
 
-      }, 1200);
+      }, 1000);
     });
   </script>
 

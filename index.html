@@ -14,19 +14,15 @@
 
     body {
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      color: #b94aa6; /* violet identique au visuel */
+      color: #b94aa6; /* violet du visuel */
       text-align: center;
       background: url("Capture d'écran 2025-09-10 140417.png") center center fixed;
       background-size: cover;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
       overflow-x: hidden;
       scroll-behavior: smooth;
-      transition: filter 1s ease, opacity 1s ease;
-      background-attachment: scroll; /* pour un léger défilement */
+      transition: background-color 1s ease, filter 1s ease;
+      background-attachment: scroll; /* léger défilement */
     }
 
     .content {
@@ -35,8 +31,15 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      padding: 3rem 1rem;
+      padding: 6rem 1rem 10rem 1rem; /* plus d’espace en haut et en bas */
+      opacity: 0;
+      animation: fadeIn 2.5s ease forwards;
       transition: opacity 0.8s ease, filter 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     p {
@@ -44,6 +47,13 @@
       line-height: 1.8rem;
       margin-bottom: 3rem;
       white-space: pre-line;
+    }
+
+    p span:first-child {
+      display: block;
+      font-size: 2.2rem; /* même taille que le titre */
+      font-weight: 500;
+      margin-bottom: 1.5rem;
     }
 
     h1 {
@@ -59,19 +69,22 @@
       height: 506px;
       border: none;
       border-radius: 0;
+      margin-bottom: 6rem; /* plus d’espace sous la vidéo */
       transition: opacity 1s ease;
+      z-index: 10;
+      position: relative;
     }
 
+    /* Assombrissement du fond (et du texte) quand la vidéo joue */
     .darken {
-      filter: brightness(0.4);
-      opacity: 0.7;
+      filter: brightness(0.3);
     }
 
     @media (max-width: 768px) {
       p {
         font-size: 1.1rem;
       }
-      h1 {
+      h1, p span:first-child {
         font-size: 1.7rem;
       }
       iframe {
@@ -83,26 +96,30 @@
 <body>
   <div class="content" id="content">
     <p>
-Merci
+      <span>Merci</span>
 Si vous avez accès à ce site c’est que vous avez contribué à la réalisation de ce court métrage
 Merci beaucoup et bon visionnage
     </p>
 
-    <h1>5 Impasse Nirvana.</h1>
+    <h1>5 Impasse Nirvana</h1>
 
     <iframe 
       id="video"
-      src="https://www.youtube.com/embed/zgHc-dJ1eww?enablejsapi=1&rel=0&showinfo=0&modestbranding=1"
+      src="https://www.youtube.com/embed/8AljwViu68U?enablejsapi=1&rel=0&showinfo=0&modestbranding=1"
       allow="autoplay; fullscreen"
       allowfullscreen>
     </iframe>
   </div>
 
   <script>
+    // Charger l'API YouTube
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    document.body.appendChild(tag);
+
     // Fonction pour détecter la lecture YouTube
     function onYouTubeIframeAPIReady() {
-      var player;
-      player = new YT.Player('video', {
+      const player = new YT.Player('video', {
         events: {
           'onStateChange': onPlayerStateChange
         }
@@ -110,18 +127,19 @@ Merci beaucoup et bon visionnage
     }
 
     function onPlayerStateChange(event) {
-      const content = document.getElementById('content');
-      if (event.data == YT.PlayerState.PLAYING) {
-        content.classList.add('darken');
-      } else if (event.data == YT.PlayerState.PAUSED || event.data == YT.PlayerState.ENDED) {
-        content.classList.remove('darken');
+      const body = document.body;
+      const video = document.getElementById('video');
+
+      // Si la vidéo joue : assombrir le fond et le texte, garder la vidéo claire
+      if (event.data === YT.PlayerState.PLAYING) {
+        body.classList.add('darken');
+        video.style.filter = "brightness(1)";
+      } 
+      // Si la vidéo est mise en pause ou terminée : restaurer le fond
+      else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+        body.classList.remove('darken');
       }
     }
-
-    // Charger l’API YouTube
-    const tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    document.body.appendChild(tag);
   </script>
 </body>
 </html>

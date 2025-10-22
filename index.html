@@ -24,7 +24,7 @@
     /* 🌄 Image de fond pleine largeur + défilement fluide */
     body::before {
       content: "";
-      position: fixed;
+      position: absolute;
       top: 0;
       left: 0;
       width: 100%;
@@ -35,6 +35,8 @@
       z-index: -1;
       transition: filter 1s ease, background-position 0.2s ease-out;
     }
+    background-attachment: scroll;
+background-position: center 0;
 
     /* Assombrissement progressif */
     body.darken::before {
@@ -142,42 +144,7 @@ Merci beaucoup et bon visionnage
       }
     }
 
-    // 🎞️ Effet de défilement fluide du fond
-    window.addEventListener('scroll', () => {
-      const scrollY = window.scrollY;
-      const docHeight = document.body.scrollHeight - window.innerHeight;
-      const scrollPercent = scrollY / docHeight;
-      // on fait glisser l’image de haut en bas lentement
-      document.body.style.setProperty('--scroll', scrollPercent);
-      document.body.style.backgroundPosition = `center ${scrollPercent * 50}%`;
-      document.body.style.setProperty('--bg-pos', `${scrollPercent * 50}%`);
-      document.body.style.setProperty('--bg-position', `${scrollPercent * 50}%`);
-      document.body.style.setProperty('--bg', `${scrollPercent * 50}%`);
-      document.querySelector('body::before');
-      document.querySelector('body').style.setProperty('--scroll-pos', `${scrollPercent * 50}%`);
-      // mais surtout : on applique au pseudo-élément via le style inline
-      document.querySelector('body').style.setProperty('--bg-scroll', `${scrollPercent * 50}%`);
-      document.body.style.setProperty('--bg-scroll', `${scrollPercent * 50}%`);
-      document.body.style.setProperty('--bg-scroll', `${scrollPercent * 50}%`);
-      document.body.style.setProperty('--bg-scroll', `${scrollPercent * 50}%`);
-      document.querySelector('body::before');
-      document.body.style.setProperty('--bg-scroll', `${scrollPercent * 50}%`);
-    });
-
-    // version stable via CSS variables
-    window.addEventListener('scroll', () => {
-      const scrollY = window.scrollY;
-      const docHeight = document.body.scrollHeight - window.innerHeight;
-      const scrollPercent = scrollY / docHeight;
-      document.documentElement.style.setProperty('--bg-shift', `${scrollPercent * 50}%`);
-      document.body.style.setProperty('--bg-shift', `${scrollPercent * 50}%`);
-      document.querySelector('body::before');
-      document.querySelector('body').style.setProperty('--bg-shift', `${scrollPercent * 50}%`);
-      document.querySelector('body').style.backgroundPositionY = `${scrollPercent * 50}%`;
-      document.querySelector('body::before');
-      document.querySelector('body').style.setProperty('--bg-shift', `${scrollPercent * 50}%`);
-      document.body.style.setProperty('--bg-shift', `${scrollPercent * 50}%`);
-    });
+ 
   </script>
 </body>
 </html>

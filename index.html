@@ -146,5 +146,16 @@ Merci beaucoup et bon visionnage
 
  
   </script>
+  <script>
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  const parallaxSpeed = 0.3; // 💫 ajuste ici (0.1 = lent, 0.5 = rapide)
+  document.body.style.setProperty('--bg-shift', `${scrollY * parallaxSpeed}px`);
+  document.querySelector('style')?.sheet?.insertRule(`
+    body::before { background-position: center calc(${scrollY * parallaxSpeed}px); }
+  `);
+});
+</script>
+
 </body>
 </html>

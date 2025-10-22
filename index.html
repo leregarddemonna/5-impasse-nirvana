@@ -14,21 +14,29 @@
     html, body {
       height: 100%;
       overflow-x: hidden;
-      scroll-behavior: smooth;
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      scroll-behavior: smooth;
     }
 
-    /* 🌄 Le fond bouge en translateY */
-    #background {
+    /* 🌄 Conteneur du fond */
+    .background-container {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      height: 120%; /* un peu plus grand pour la marge de mouvement */
-      background: url("Capture d'écran 2025-09-10 140417.png") center top no-repeat;
-      background-size: cover;
-      background-color: black;
-      z-index: -1;
+      height: 100vh;
+      overflow: hidden;
+      z-index: -2;
+    }
+
+    .background-container img {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 100%;
+      min-height: 100%;
+      object-fit: cover;
       transition: filter 1s ease;
       will-change: transform;
     }
@@ -39,7 +47,7 @@
       transition: color 1s ease;
     }
 
-    body.darken #background {
+    body.darken .background-container img {
       filter: brightness(0.3);
     }
 
@@ -52,7 +60,7 @@
       flex-direction: column;
       align-items: center;
       min-height: 200vh;
-      padding: 14rem 1rem 10rem 1rem;
+      padding: 16rem 1rem 10rem 1rem;
       opacity: 0;
       animation: fadeIn 2.5s ease forwards;
     }
@@ -95,12 +103,14 @@
     @media (max-width: 768px) {
       p { font-size: 1.1rem; }
       h1, p span:first-child { font-size: 1.7rem; }
-      iframe { aspect-ratio: 1912 / 1152; }
     }
   </style>
 </head>
 <body>
-  <div id="background"></div>
+  <!-- 🌄 Image de fond -->
+  <div class="background-container">
+    <img src="Capture d'écran 2025-09-10 140417.png" alt="fond">
+  </div>
 
   <div class="content">
     <p>
@@ -120,12 +130,12 @@ Merci beaucoup et bon visionnage
   </div>
 
   <script>
-    // 🌅 Parallax fluide via transform
-    const bg = document.getElementById('background');
+    // 🌅 Défilement du fond
+    const bg = document.querySelector('.background-container img');
     window.addEventListener('scroll', () => {
       const scrollY = window.scrollY;
-      // Déplacement fluide : 0.2 = intensité
-      bg.style.transform = `translateY(${scrollY * 0.2}px)`;
+      // défilement doux, ajustable : 0.3 = intensité
+      bg.style.transform = `translate(-50%, ${scrollY * 0.2}px)`;
     });
 
     // 🎥 API YouTube

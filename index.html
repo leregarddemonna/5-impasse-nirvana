@@ -16,7 +16,7 @@
       color: #b94aa6;
       text-align: center;
       overflow-x: hidden;
-      min-height: 200vh; /* permet de défiler */
+      min-height: 200vh;
       position: relative;
       transition: color 1s ease;
     }
@@ -28,15 +28,13 @@
       top: 0;
       left: 0;
       width: 100%;
-      height: 120%; /* un peu plus haute pour permettre le glissement */
-      background: url("background.png") top center no-repeat;
-      background-size: 100% auto;
+      height: 120%;
+      background: url("background.png") center 0 no-repeat;
+      background-size: cover;
       background-color: black;
       z-index: -1;
       transition: filter 1s ease, background-position 0.2s ease-out;
     }
-    background-attachment: scroll;
-background-position: center 0;
 
     /* Assombrissement progressif */
     body.darken::before {
@@ -81,7 +79,6 @@ background-position: center 0;
       font-weight: 500;
     }
 
-    /* 🎥 Ratio exact 1912x1152 */
     iframe {
       width: 90%;
       max-width: 900px;
@@ -93,15 +90,9 @@ background-position: center 0;
     }
 
     @media (max-width: 768px) {
-      p {
-        font-size: 1.1rem;
-      }
-      h1, p span:first-child {
-        font-size: 1.7rem;
-      }
-      iframe {
-        aspect-ratio: 1912 / 1152;
-      }
+      p { font-size: 1.1rem; }
+      h1, p span:first-child { font-size: 1.7rem; }
+      iframe { aspect-ratio: 1912 / 1152; }
     }
   </style>
 </head>
@@ -144,18 +135,18 @@ Merci beaucoup et bon visionnage
       }
     }
 
- 
+    // 🌠 Parallax : le fond défile plus lentement que la page
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      const parallaxSpeed = 0.3; // 💫 plus petit = plus lent
+      const bgPosition = scrollY * parallaxSpeed;
+      document.body.style.setProperty('--bg-shift', `${bgPosition}px`);
+      document.querySelector('body').style.setProperty('--bg-shift', `${bgPosition}px`);
+      document.body.style.backgroundPositionY = `${bgPosition}px`;
+      // Met à jour le pseudo-élément via une variable CSS
+      document.body.style.setProperty('--bg-pos', `${bgPosition}px`);
+      document.querySelector('style').innerHTML += `body::before{background-position:center ${bgPosition}px !important}`;
+    });
   </script>
-  <script>
-window.addEventListener('scroll', () => {
-  const scrollY = window.scrollY;
-  const parallaxSpeed = 0.3; // 💫 ajuste ici (0.1 = lent, 0.5 = rapide)
-  document.body.style.setProperty('--bg-shift', `${scrollY * parallaxSpeed}px`);
-  document.querySelector('style')?.sheet?.insertRule(`
-    body::before { background-position: center calc(${scrollY * parallaxSpeed}px); }
-  `);
-});
-</script>
-
 </body>
 </html>

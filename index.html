@@ -19,24 +19,25 @@
       min-height: 100vh;
       scroll-behavior: smooth;
       position: relative;
-      transition: color 1s ease; /* Pour fondu du texte */
+      transition: color 1s ease; /* fondu du texte */
     }
 
-    /* 🌄 Arrière-plan dans un calque séparé */
+    /* 🌄 Arrière-plan complet, non recadré */
     body::before {
       content: "";
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      height: 120%;
-      background: url("Capture d'écran 2025-09-10 140417.png") center top;
-      background-size: cover;
+      height: 100%;
+      background: url("Capture d'écran 2025-09-10 140417.png") center center no-repeat;
+      background-size: contain; /* montre toute l’image */
+      background-color: black;  /* comble les bords si besoin */
       z-index: -1;
-      transition: filter 1s ease, transform 0.5s ease-out;
+      transition: filter 1s ease;
     }
 
-    /* Quand la vidéo joue : assombrir le fond ET le texte */
+    /* Quand la vidéo joue : fond et texte s’assombrissent */
     body.darken::before {
       filter: brightness(0.3);
     }
@@ -50,10 +51,9 @@
       justify-content: flex-start;
       align-items: center;
       min-height: 100vh;
-      padding: 12rem 1rem 10rem 1rem; /* Plus d’espace au-dessus */
+      padding: 12rem 1rem 10rem 1rem;
       opacity: 0;
       animation: fadeIn 2.5s ease forwards;
-      transition: opacity 0.8s ease;
     }
 
     @keyframes fadeIn {
@@ -64,7 +64,7 @@
     p {
       font-size: 1.3rem;
       line-height: 1.8rem;
-      margin-bottom: 8rem; /* Espace entre le texte et le titre */
+      margin-bottom: 8rem;
       white-space: pre-line;
     }
 
@@ -82,14 +82,14 @@
       font-weight: 500;
     }
 
+    /* 🎥 Vidéo adaptée à la taille réelle */
     iframe {
       width: 90%;
       max-width: 900px;
-      height: 506px;
+      aspect-ratio: 21 / 9; /* format plus large que 16:9 pour ton film */
       border: none;
       margin-bottom: 10rem;
       z-index: 1;
-      position: relative;
       transition: opacity 1s ease;
     }
 
@@ -101,13 +101,13 @@
         font-size: 1.7rem;
       }
       iframe {
-        height: 250px;
+        aspect-ratio: 21 / 9;
       }
     }
   </style>
 </head>
 <body>
-  <div class="content" id="content">
+  <div class="content">
     <p>
       <span>Merci</span>
 Si vous avez accès à ce site c’est que vous avez contribué à la réalisation de ce court métrage
@@ -144,30 +144,6 @@ Merci beaucoup et bon visionnage
         body.classList.remove('darken');
       }
     }
-
-    // 🎞 Effet de défilement du fond (parallaxe simple)
-    window.addEventListener('scroll', () => {
-      const scrollY = window.scrollY;
-      document.body.style.setProperty('--scrollY', scrollY);
-      document.body.style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
-      document.body.querySelector(':root').style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
-      document.body.style.setProperty('transform', `translateY(0)`);
-      document.body.style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
-      document.body.style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
-      document.querySelector('body').style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
-      document.body.style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
-      document.body.style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
-      document.body.style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
-      document.body.style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
-      document.body.style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
-      document.body.style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
-      document.body.style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
-      document.body.style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
-      document.body.querySelector('body::before');
-      document.body.style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
-      document.querySelector('body::before');
-      document.body.style.setProperty('--scrollTransform', `translateY(${scrollY * 0.3}px)`);
-    });
   </script>
 </body>
 </html>

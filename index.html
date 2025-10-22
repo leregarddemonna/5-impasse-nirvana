@@ -12,30 +12,25 @@
     }
 
     html, body {
+      height: 100%;
       overflow-x: hidden;
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      scroll-behavior: smooth;
       color: #b94aa6;
       text-align: center;
-      transition: color 1s ease;
+      scroll-behavior: smooth;
+      transition: color 1s ease, background-color 1s ease;
       background-color: black;
+      /* 🌄 Le fond est défini ici */
+      background-image: url("Capture d'écran 2025-09-10 140417.png");
+      background-size: 100% auto; /* largeur 100%, hauteur adaptée */
+      background-repeat: no-repeat;
+      background-position: top center;
+      background-attachment: scroll; /* défile avec la page */
     }
 
     body.darken {
       color: rgba(185, 74, 166, 0.4);
-    }
-
-    /* 🌄 L’image fait partie du flux, pas absolute */
-    .background {
-      display: block;
-      width: 100%;
-      height: auto;
-      object-fit: cover;
-      transition: filter 1s ease;
-    }
-
-    body.darken .background {
-      filter: brightness(0.3);
+      background-color: rgba(0, 0, 0, 0.9);
     }
 
     .content {
@@ -44,7 +39,7 @@
       align-items: center;
       justify-content: flex-start;
       min-height: 100vh;
-      padding: 16rem 1rem 10rem 1rem;
+      padding: 18rem 1rem 12rem 1rem;
       opacity: 0;
       animation: fadeIn 2.5s ease forwards;
     }
@@ -57,7 +52,7 @@
     p {
       font-size: 1.3rem;
       line-height: 1.8rem;
-      margin-bottom: 8rem;
+      margin-bottom: 10rem;
       white-space: pre-line;
     }
 
@@ -70,6 +65,7 @@
 
     h1 {
       font-size: 2.2rem;
+      margin-top: 8rem;
       margin-bottom: 2rem;
       font-weight: 500;
     }
@@ -79,7 +75,7 @@
       max-width: 900px;
       aspect-ratio: 1912 / 1152;
       border: none;
-      margin-bottom: 10rem;
+      margin-bottom: 12rem;
       z-index: 1;
       transition: opacity 1s ease;
     }
@@ -91,9 +87,6 @@
   </style>
 </head>
 <body>
-  <!-- 🌄 Image de fond dans le flux -->
-  <img class="background" src="Capture d'écran 2025-09-10 140417.png" alt="fond" />
-
   <div class="content">
     <p>
       <span>Merci</span>
@@ -112,7 +105,7 @@ Merci beaucoup et bon visionnage
   </div>
 
   <script>
-    // 🎥 API YouTube : assombrir le fond quand la vidéo joue
+    // 🎥 API YouTube : assombrir le fond et le texte pendant la lecture
     const tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     document.body.appendChild(tag);

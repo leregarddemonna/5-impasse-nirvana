@@ -18,26 +18,19 @@
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     }
 
-    /* 🌄 Fond d’écran : visible haut/bas, adaptatif et animé */
+    /* 🌄 Le fond bouge en translateY */
     #background {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      height: 100%;
+      height: 120%; /* un peu plus grand pour la marge de mouvement */
       background: url("Capture d'écran 2025-09-10 140417.png") center top no-repeat;
-      background-size: auto 100%; /* on voit tout le haut et le bas */
+      background-size: cover;
       background-color: black;
       z-index: -1;
       transition: filter 1s ease;
-      will-change: background-position;
-    }
-
-    /* 🧠 Sur les écrans larges : on bascule en cover */
-    @media (min-aspect-ratio: 16/9) {
-      #background {
-        background-size: cover;
-      }
+      will-change: transform;
     }
 
     body {
@@ -46,10 +39,10 @@
       transition: color 1s ease;
     }
 
-    /* 🎬 Quand la vidéo joue */
     body.darken #background {
       filter: brightness(0.3);
     }
+
     body.darken {
       color: rgba(185, 74, 166, 0.4);
     }
@@ -58,7 +51,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 200vh; /* on peut défiler */
+      min-height: 200vh;
       padding: 14rem 1rem 10rem 1rem;
       opacity: 0;
       animation: fadeIn 2.5s ease forwards;
@@ -92,7 +85,7 @@
     iframe {
       width: 90%;
       max-width: 900px;
-      aspect-ratio: 1912 / 1152; /* ratio exact */
+      aspect-ratio: 1912 / 1152;
       border: none;
       margin-bottom: 10rem;
       z-index: 1;
@@ -127,15 +120,12 @@ Merci beaucoup et bon visionnage
   </div>
 
   <script>
-    // 🌈 Effet parallax fluide
-    const background = document.getElementById('background');
-    let lastScroll = 0;
-
+    // 🌅 Parallax fluide via transform
+    const bg = document.getElementById('background');
     window.addEventListener('scroll', () => {
       const scrollY = window.scrollY;
-      // effet doux : 0.3 = vitesse du mouvement
-      const offset = scrollY * 0.3;
-      background.style.backgroundPosition = `center calc(0% + ${offset}px)`;
+      // Déplacement fluide : 0.2 = intensité
+      bg.style.transform = `translateY(${scrollY * 0.2}px)`;
     });
 
     // 🎥 API YouTube

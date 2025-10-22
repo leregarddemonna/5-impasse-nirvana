@@ -17,12 +17,11 @@
       text-align: center;
       overflow-x: hidden;
       min-height: 100vh;
-      scroll-behavior: smooth;
       position: relative;
-      transition: color 1s ease; /* fondu du texte */
+      transition: color 1s ease;
     }
 
-    /* 🌄 Arrière-plan complet, non recadré */
+    /* 🌄 Image de fond : pleine largeur, conserve les proportions */
     body::before {
       content: "";
       position: fixed;
@@ -30,14 +29,14 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: url("Capture d'écran 2025-09-10 140417.png") center center no-repeat;
-      background-size: contain; /* montre toute l’image */
-      background-color: black;  /* comble les bords si besoin */
+      background: url("Capture d'écran 2025-09-10 140417.png") top center no-repeat;
+      background-size: 100% auto; /* Pleine largeur, pas de recadrage */
+      background-color: black;    /* fond neutre autour si besoin */
       z-index: -1;
       transition: filter 1s ease;
     }
 
-    /* Quand la vidéo joue : fond et texte s’assombrissent */
+    /* Fond et texte s’assombrissent quand la vidéo joue */
     body.darken::before {
       filter: brightness(0.3);
     }
@@ -48,10 +47,9 @@
     .content {
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
       align-items: center;
       min-height: 100vh;
-      padding: 12rem 1rem 10rem 1rem;
+      padding: 14rem 1rem 10rem 1rem; /* centré verticalement */
       opacity: 0;
       animation: fadeIn 2.5s ease forwards;
     }
@@ -78,15 +76,14 @@
     h1 {
       font-size: 2.2rem;
       margin-bottom: 2rem;
-      letter-spacing: 0.5px;
       font-weight: 500;
     }
 
-    /* 🎥 Vidéo adaptée à la taille réelle */
+    /* 🎥 Lecteur vidéo ajustable (ratio à modifier selon ta vidéo réelle) */
     iframe {
       width: 90%;
       max-width: 900px;
-      aspect-ratio: 21 / 9; /* format plus large que 16:9 pour ton film */
+      aspect-ratio: 16 / 9; /* par défaut, à remplacer quand tu me donnes la taille */
       border: none;
       margin-bottom: 10rem;
       z-index: 1;
@@ -101,7 +98,7 @@
         font-size: 1.7rem;
       }
       iframe {
-        aspect-ratio: 21 / 9;
+        aspect-ratio: 16 / 9;
       }
     }
   </style>
@@ -125,7 +122,7 @@ Merci beaucoup et bon visionnage
   </div>
 
   <script>
-    // Charger l'API YouTube
+    // API YouTube
     const tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     document.body.appendChild(tag);

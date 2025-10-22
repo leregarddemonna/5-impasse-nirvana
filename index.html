@@ -18,7 +18,7 @@
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     }
 
-    /* 🌄 Le fond : couvre toute la hauteur de la page, sans crop haut/bas */
+    /* 🌄 Fond d’écran : visible haut/bas, adaptatif et animé */
     #background {
       position: fixed;
       top: 0;
@@ -26,10 +26,18 @@
       width: 100%;
       height: 100%;
       background: url("Capture d'écran 2025-09-10 140417.png") center top no-repeat;
-      background-size: auto 100%; /* On ajuste à la hauteur, quitte à couper sur les côtés */
+      background-size: auto 100%; /* on voit tout le haut et le bas */
       background-color: black;
       z-index: -1;
       transition: filter 1s ease;
+      will-change: background-position;
+    }
+
+    /* 🧠 Sur les écrans larges : on bascule en cover */
+    @media (min-aspect-ratio: 16/9) {
+      #background {
+        background-size: cover;
+      }
     }
 
     body {
@@ -38,10 +46,10 @@
       transition: color 1s ease;
     }
 
+    /* 🎬 Quand la vidéo joue */
     body.darken #background {
       filter: brightness(0.3);
     }
-
     body.darken {
       color: rgba(185, 74, 166, 0.4);
     }
@@ -50,7 +58,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 200vh; /* On peut défiler */
+      min-height: 200vh; /* on peut défiler */
       padding: 14rem 1rem 10rem 1rem;
       opacity: 0;
       animation: fadeIn 2.5s ease forwards;
@@ -119,7 +127,18 @@ Merci beaucoup et bon visionnage
   </div>
 
   <script>
-    // API YouTube
+    // 🌈 Effet parallax fluide
+    const background = document.getElementById('background');
+    let lastScroll = 0;
+
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      // effet doux : 0.3 = vitesse du mouvement
+      const offset = scrollY * 0.3;
+      background.style.backgroundPosition = `center calc(0% + ${offset}px)`;
+    });
+
+    // 🎥 API YouTube
     const tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     document.body.appendChild(tag);

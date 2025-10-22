@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>5 Impasse Nirvana</title>
   <style>
     * {
@@ -16,50 +16,31 @@
       overflow-x: hidden;
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       scroll-behavior: smooth;
-    }
-
-    /* 🌄 Conteneur du fond */
-    .background-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      overflow: hidden;
-      z-index: -2;
-    }
-
-    .background-container img {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      min-width: 100%;
-      min-height: 100%;
-      object-fit: cover;
-      transition: filter 1s ease;
-      will-change: transform;
-    }
-
-    body {
       color: #b94aa6;
       text-align: center;
       transition: color 1s ease;
-    }
-
-    body.darken .background-container img {
-      filter: brightness(0.3);
     }
 
     body.darken {
       color: rgba(185, 74, 166, 0.4);
     }
 
+    /* 🌄 Le fond : image normale, pas fixe */
+    .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: auto;
+      z-index: -1;
+    }
+
     .content {
+      min-height: 200vh; /* permet de scroller */
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 200vh;
+      justify-content: flex-start;
       padding: 16rem 1rem 10rem 1rem;
       opacity: 0;
       animation: fadeIn 2.5s ease forwards;
@@ -100,6 +81,12 @@
       transition: opacity 1s ease;
     }
 
+    /* 🌘 Fond plus sombre quand la vidéo joue */
+    body.darken .background {
+      filter: brightness(0.3);
+      transition: filter 1s ease;
+    }
+
     @media (max-width: 768px) {
       p { font-size: 1.1rem; }
       h1, p span:first-child { font-size: 1.7rem; }
@@ -108,9 +95,7 @@
 </head>
 <body>
   <!-- 🌄 Image de fond -->
-  <div class="background-container">
-    <img src="Capture d'écran 2025-09-10 140417.png" alt="fond">
-  </div>
+  <img class="background" src="Capture d'écran 2025-09-10 140417.png" alt="fond" />
 
   <div class="content">
     <p>
@@ -130,15 +115,7 @@ Merci beaucoup et bon visionnage
   </div>
 
   <script>
-    // 🌅 Défilement du fond
-    const bg = document.querySelector('.background-container img');
-    window.addEventListener('scroll', () => {
-      const scrollY = window.scrollY;
-      // défilement doux, ajustable : 0.3 = intensité
-      bg.style.transform = `translate(-50%, ${scrollY * 0.2}px)`;
-    });
-
-    // 🎥 API YouTube
+    // 🎥 API YouTube : assombrir le fond quand la vidéo joue
     const tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     document.body.appendChild(tag);

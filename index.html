@@ -12,35 +12,38 @@
     }
 
     html, body {
-      height: 100%;
       overflow-x: hidden;
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       scroll-behavior: smooth;
       color: #b94aa6;
       text-align: center;
       transition: color 1s ease;
+      background-color: black;
     }
 
     body.darken {
       color: rgba(185, 74, 166, 0.4);
     }
 
-    /* 🌄 Le fond : image normale, pas fixe */
+    /* 🌄 L’image fait partie du flux, pas absolute */
     .background {
-      position: absolute;
-      top: 0;
-      left: 0;
+      display: block;
       width: 100%;
       height: auto;
-      z-index: -1;
+      object-fit: cover;
+      transition: filter 1s ease;
+    }
+
+    body.darken .background {
+      filter: brightness(0.3);
     }
 
     .content {
-      min-height: 200vh; /* permet de scroller */
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
+      min-height: 100vh;
       padding: 16rem 1rem 10rem 1rem;
       opacity: 0;
       animation: fadeIn 2.5s ease forwards;
@@ -81,12 +84,6 @@
       transition: opacity 1s ease;
     }
 
-    /* 🌘 Fond plus sombre quand la vidéo joue */
-    body.darken .background {
-      filter: brightness(0.3);
-      transition: filter 1s ease;
-    }
-
     @media (max-width: 768px) {
       p { font-size: 1.1rem; }
       h1, p span:first-child { font-size: 1.7rem; }
@@ -94,7 +91,7 @@
   </style>
 </head>
 <body>
-  <!-- 🌄 Image de fond -->
+  <!-- 🌄 Image de fond dans le flux -->
   <img class="background" src="Capture d'écran 2025-09-10 140417.png" alt="fond" />
 
   <div class="content">

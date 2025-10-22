@@ -19,5 +19,68 @@
       background: url("Capture d'écran 2025-09-10 140417.png") no-repeat center center fixed;
       background-size: cover;
       min-height: 100vh;
-      display: flex;
-      flex-direction: col
+      padding: 4rem 1rem 6rem 1rem;
+      overflow-y: auto;
+    }
+
+    .content {
+      max-width: 900px;
+      margin: 0 auto;
+      backdrop-filter: brightness(1);
+    }
+
+    p {
+      font-size: 1.2rem;
+      line-height: 1.8rem;
+      margin-bottom: 3rem;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+    }
+
+    iframe {
+      width: 100%;
+      max-width: 900px;
+      height: 506px;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+      p {
+        font-size: 1rem;
+      }
+      iframe {
+        height: 250px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="content">
+    <p>
+      Merci. Si vous avez accès à ce site c’est que vous avez contribué à la réalisation de ce court métrage.<br>
+      Merci beaucoup et bon visionnage.
+    </p>
+
+    <h1>5 Impasse Nirvana</h1>
+
+    <iframe
+      src="https://www.youtube.com/embed/zgHc-dJ1eww?rel=0&showinfo=0&modestbranding=1"
+      allow="autoplay; fullscreen"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+</body>
+</html>

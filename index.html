@@ -5,106 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>5 Impasse Nirvana</title>
   <style>
+    /* Style de base */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
-    html, body {
-      height: 100%;
-      width: 100%;
+    body {
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       color: white;
-      scroll-behavior: smooth;
-      overflow-x: hidden;
-      background: url('background.png') no-repeat center center fixed;
+      text-align: center;
+      background: url("Capture d'écran 2025-09-10 140417.png") no-repeat center center fixed;
       background-size: cover;
-    }
-
-    /* Retrait du voile gris : on garde le fond pur */
-    section {
-      width: 100%;
       min-height: 100vh;
       display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 2rem;
-      background: rgba(0, 0, 0, 0.25); /* léger contraste pour lisibilité du texte */
-    }
-
-    h1 {
-      font-size: 1.6rem;
-      line-height: 2.2rem;
-      max-width: 800px;
-      animation: fadeIn 2s ease forwards;
-    }
-
-    strong {
-      display: block;
-      margin-top: 1rem;
-      font-weight: bold;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Section vidéo */
-    .video-section {
-      padding: 4rem 2rem;
-      background: rgba(0, 0, 0, 0.35);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .video-wrapper {
-      position: relative;
-      width: 90%;
-      max-width: 900px;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-
-    .video-wrapper:hover {
-      transform: scale(1.02);
-    }
-
-    #thumbnail {
-      width: 100%;
-      display: block;
-    }
-
-    /* Bouton Play minimaliste (triangle seul) */
-    #play-button {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      border-top: 30px solid transparent;
-      border-bottom: 30px solid transparent;
-      border-left: 45px solid white;
-      transform: translate(-50%, -50%);
-      opacity: 0.9;
-      transition: opacity 0.3s ease;
-      filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
-    }
-
-    #play-button:hover {
-      opacity: 1;
-    }
-
-    /* Écran noir pour le fondu */
-    #fade-screen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width
+      flex-direction: col

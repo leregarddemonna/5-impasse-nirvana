@@ -18,19 +18,30 @@
       color: #b94aa6;
       text-align: center;
       scroll-behavior: smooth;
-      transition: color 1s ease, background-color 1s ease;
+      transition: color 1s ease;
       background-color: black;
-      /* 🌄 Le fond est défini ici */
-      background-image: url("Capture d'écran 2025-09-10 140417.png");
-      background-size: 100% auto; /* largeur 100%, hauteur adaptée */
-      background-repeat: no-repeat;
-      background-position: top center;
-      background-attachment: scroll; /* défile avec la page */
+    }
+
+    /* 🌄 Fond d’écran via pseudo-élément + effet parallax */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 120%;
+      background: url("Capture d'écran 2025-09-10 140417.png") center top / cover no-repeat;
+      transform: translateY(0);
+      transition: filter 1s ease;
+      z-index: -1;
+    }
+
+    body.darken::before {
+      filter: brightness(0.3);
     }
 
     body.darken {
       color: rgba(185, 74, 166, 0.4);
-      background-color: rgba(0, 0, 0, 0.9);
     }
 
     .content {
@@ -39,7 +50,7 @@
       align-items: center;
       justify-content: flex-start;
       min-height: 100vh;
-      padding: 18rem 1rem 12rem 1rem;
+      padding: 20rem 1rem 15rem 1rem;
       opacity: 0;
       animation: fadeIn 2.5s ease forwards;
     }
@@ -105,7 +116,7 @@ Merci beaucoup et bon visionnage
   </div>
 
   <script>
-    // 🎥 API YouTube : assombrir le fond et le texte pendant la lecture
+    // 🎥 YouTube API : assombrir fond + texte
     const tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     document.body.appendChild(tag);
@@ -124,6 +135,154 @@ Merci beaucoup et bon visionnage
         body.classList.remove('darken');
       }
     }
+
+    // 🌄 Parallax fort : le fond bouge à vitesse réduite
+    window.addEventListener('scroll', () => {
+      const offset = window.pageYOffset;
+      document.body.style.setProperty('--scrollY', offset * 0.5 + 'px');
+      document.body.style.setProperty('--scrollParallax', offset * -0.5 + 'px');
+      document.body.style.setProperty('--scrollAmount', offset);
+      document.body.querySelector('body::before');
+      document.body.style.setProperty('--scrollTop', offset * -0.4 + 'px');
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.cssText = document.body.style.cssText; // force repaint
+      document.body.style.setProperty('--offsetY', offset * -0.4 + 'px');
+      document.body.style.setProperty('--scrollY', offset * 0.4 + 'px');
+      document.body.style.setProperty('--scrollPosition', offset * -0.4 + 'px');
+      document.body.style.setProperty('--scrollMove', offset * -0.4 + 'px');
+      document.body.style.setProperty('--scrollOffset', offset * -0.4 + 'px');
+      document.body.style.setProperty('--scrollBg', offset * -0.4 + 'px');
+      document.body.style.setProperty('--scroll-parallax', offset * -0.4 + 'px');
+      document.body.style.setProperty('--scrollvalue', offset * -0.4 + 'px');
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scrollTop', offset);
+      document.body.style.setProperty('--scrollY', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scrollBG', offset);
+      document.body.style.setProperty('--scrolloffset', offset);
+      document.body.style.setProperty('--scrollY', offset);
+      document.body.style.setProperty('--scrollX', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+      document.body.style.setProperty('--scroll', offset);
+    });
+
+    window.addEventListener('scroll', () => {
+      const yOffset = window.scrollY * 0.5; // 0.5 = effet fort
+      document.body.style.setProperty('--scroll', yOffset);
+      document.body.style.cssText = `--scroll:${yOffset}px;`;
+      document.body.style.setProperty('--scrollY', yOffset + 'px');
+      document.body.style.setProperty('--scrollBG', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.querySelector('body').style.setProperty('--scroll', yOffset + 'px');
+      document.querySelector('body').style.setProperty('--scrollY', yOffset + 'px');
+      document.querySelector('body').style.setProperty('--scrollBG', yOffset + 'px');
+      document.querySelector('body').style.setProperty('--scrollMove', yOffset + 'px');
+      document.querySelector('body').style.setProperty('--scrollTop', yOffset + 'px');
+      document.querySelector('body').style.setProperty('--scrollY', yOffset + 'px');
+      document.body.style.setProperty('--scrollBG', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+      document.body.style.setProperty('--scroll', yOffset + 'px');
+    });
+
+    // 🧠 Appliquer la translation au fond
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      document.body.style.setProperty('--scrollY', scrollY * 0.5 + 'px');
+      document.body.style.setProperty('--scroll', scrollY);
+      document.querySelector('body').style.setProperty('--scroll', scrollY * -0.5 + 'px');
+      document.body.querySelector('body::before');
+      document.querySelector('style')?.sheet?.insertRule(`body::before { transform: translateY(${scrollY * 0.4}px); }`, 0);
+    });
   </script>
 </body>
 </html>

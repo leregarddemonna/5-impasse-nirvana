@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>5 Impasse Nirvana</title>
   <style>
-    /* Style de base */
+    /* RESET */
     * {
       margin: 0;
       padding: 0;
@@ -14,50 +14,65 @@
 
     body {
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      color: white;
+      color: #b94aa6; /* violet identique au visuel */
       text-align: center;
-      background: url("Capture d'écran 2025-09-10 140417.png") no-repeat center center fixed;
+      background: url("Capture d'écran 2025-09-10 140417.png") center center fixed;
       background-size: cover;
       min-height: 100vh;
-      padding: 4rem 1rem 6rem 1rem;
-      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      transition: filter 1s ease, opacity 1s ease;
+      background-attachment: scroll; /* pour un léger défilement */
     }
 
     .content {
-      max-width: 900px;
-      margin: 0 auto;
-      backdrop-filter: brightness(1);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 3rem 1rem;
+      transition: opacity 0.8s ease, filter 0.8s ease;
     }
 
     p {
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       line-height: 1.8rem;
       margin-bottom: 3rem;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+      white-space: pre-line;
     }
 
     h1 {
-      font-size: 3rem;
-      font-weight: 700;
-      margin-bottom: 1.5rem;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+      font-size: 2.2rem;
+      margin-bottom: 2rem;
+      letter-spacing: 0.5px;
+      font-weight: 500;
     }
 
     iframe {
-      width: 100%;
+      width: 90%;
       max-width: 900px;
       height: 506px;
       border: none;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+      border-radius: 0;
+      transition: opacity 1s ease;
+    }
+
+    .darken {
+      filter: brightness(0.4);
+      opacity: 0.7;
     }
 
     @media (max-width: 768px) {
-      h1 {
-        font-size: 2rem;
-      }
       p {
-        font-size: 1rem;
+        font-size: 1.1rem;
+      }
+      h1 {
+        font-size: 1.7rem;
       }
       iframe {
         height: 250px;
@@ -66,21 +81,47 @@
   </style>
 </head>
 <body>
-
-  <div class="content">
+  <div class="content" id="content">
     <p>
-      Merci. Si vous avez accès à ce site c’est que vous avez contribué à la réalisation de ce court métrage.<br>
-      Merci beaucoup et bon visionnage.
+Merci
+Si vous avez accès à ce site c’est que vous avez contribué à la réalisation de ce court métrage
+Merci beaucoup et bon visionnage
     </p>
 
-    <h1>5 Impasse Nirvana</h1>
+    <h1>5 Impasse Nirvana.</h1>
 
-    <iframe
-      src="https://www.youtube.com/embed/zgHc-dJ1eww?rel=0&showinfo=0&modestbranding=1"
+    <iframe 
+      id="video"
+      src="https://www.youtube.com/embed/zgHc-dJ1eww?enablejsapi=1&rel=0&showinfo=0&modestbranding=1"
       allow="autoplay; fullscreen"
       allowfullscreen>
     </iframe>
   </div>
 
+  <script>
+    // Fonction pour détecter la lecture YouTube
+    function onYouTubeIframeAPIReady() {
+      var player;
+      player = new YT.Player('video', {
+        events: {
+          'onStateChange': onPlayerStateChange
+        }
+      });
+    }
+
+    function onPlayerStateChange(event) {
+      const content = document.getElementById('content');
+      if (event.data == YT.PlayerState.PLAYING) {
+        content.classList.add('darken');
+      } else if (event.data == YT.PlayerState.PAUSED || event.data == YT.PlayerState.ENDED) {
+        content.classList.remove('darken');
+      }
+    }
+
+    // Charger l’API YouTube
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    document.body.appendChild(tag);
+  </script>
 </body>
 </html>

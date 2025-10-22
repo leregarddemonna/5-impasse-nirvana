@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>5 Impasse Nirvana</title>
   <style>
-    /* RESET */
     * {
       margin: 0;
       padding: 0;
@@ -14,15 +13,31 @@
 
     body {
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      color: #b94aa6; /* violet du visuel */
+      color: #b94aa6;
       text-align: center;
+      overflow-x: hidden;
+      min-height: 100vh;
+      scroll-behavior: smooth;
+      position: relative;
+    }
+
+    /* 🌄 Arrière-plan dans un calque séparé */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       background: url("Capture d'écran 2025-09-10 140417.png") center center fixed;
       background-size: cover;
-      min-height: 100vh;
-      overflow-x: hidden;
-      scroll-behavior: smooth;
-      transition: background-color 1s ease, filter 1s ease;
-      background-attachment: scroll; /* léger défilement */
+      z-index: -1;
+      transition: filter 1s ease;
+    }
+
+    /* Quand la vidéo joue, le fond s’assombrit */
+    body.darken::before {
+      filter: brightness(0.3);
     }
 
     .content {
@@ -31,10 +46,10 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      padding: 6rem 1rem 10rem 1rem; /* plus d’espace en haut et en bas */
+      padding: 6rem 1rem 10rem 1rem;
       opacity: 0;
       animation: fadeIn 2.5s ease forwards;
-      transition: opacity 0.8s ease, filter 0.8s ease;
+      transition: opacity 0.8s ease;
     }
 
     @keyframes fadeIn {
@@ -51,7 +66,7 @@
 
     p span:first-child {
       display: block;
-      font-size: 2.2rem; /* même taille que le titre */
+      font-size: 2.2rem;
       font-weight: 500;
       margin-bottom: 1.5rem;
     }
@@ -68,16 +83,10 @@
       max-width: 900px;
       height: 506px;
       border: none;
-      border-radius: 0;
-      margin-bottom: 6rem; /* plus d’espace sous la vidéo */
-      transition: opacity 1s ease;
-      z-index: 10;
+      margin-bottom: 6rem;
+      z-index: 1;
       position: relative;
-    }
-
-    /* Assombrissement du fond (et du texte) quand la vidéo joue */
-    .darken {
-      filter: brightness(0.3);
+      transition: opacity 1s ease;
     }
 
     @media (max-width: 768px) {
@@ -117,7 +126,6 @@ Merci beaucoup et bon visionnage
     tag.src = "https://www.youtube.com/iframe_api";
     document.body.appendChild(tag);
 
-    // Fonction pour détecter la lecture YouTube
     function onYouTubeIframeAPIReady() {
       const player = new YT.Player('video', {
         events: {
@@ -128,14 +136,12 @@ Merci beaucoup et bon visionnage
 
     function onPlayerStateChange(event) {
       const body = document.body;
-      const video = document.getElementById('video');
 
-      // Si la vidéo joue : assombrir le fond et le texte, garder la vidéo claire
+      // Si la vidéo joue → fond s’assombrit
       if (event.data === YT.PlayerState.PLAYING) {
         body.classList.add('darken');
-        video.style.filter = "brightness(1)";
       } 
-      // Si la vidéo est mise en pause ou terminée : restaurer le fond
+      // Si pause ou fin → fond revient normal
       else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
         body.classList.remove('darken');
       }

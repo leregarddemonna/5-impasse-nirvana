@@ -138,7 +138,7 @@ Merci beaucoup et bon visionnage
     // 🌠 Parallax : le fond défile plus lentement que la page
     window.addEventListener('scroll', () => {
       const scrollY = window.scrollY;
-      const parallaxSpeed = 0.8; // 💫 plus petit = plus lent
+      const parallaxSpeed = 0.1; // 💫 plus petit = plus lent
       const bgPosition = scrollY * parallaxSpeed;
       document.body.style.setProperty('--bg-shift', `${bgPosition}px`);
       document.querySelector('body').style.setProperty('--bg-shift', `${bgPosition}px`);

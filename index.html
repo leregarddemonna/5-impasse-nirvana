@@ -1,142 +1,104 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>5 Impasse Nirvana</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html, body {
-      height: 100%;
-      overflow-x: hidden;
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      color: #b94aa6;
-      text-align: center;
-      scroll-behavior: smooth;
-      transition: color 1s ease;
-      background-color: black;
-      position: relative;
-    }
-
-    body.darken {
-      color: rgba(185, 74, 166, 0.4);
-    }
-
-    /* 🌄 Image dans le flux mais derrière le texte */
-    .background {
-      position: fixed; /* reste toujours visible */
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -1; /* Derrière le contenu */
-      transition: filter 1s ease;
-    }
-
-    body.darken .background {
-      filter: brightness(0.3);
-    }
-
-    .content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-      padding: 20rem 1rem 15rem 1rem;
-      opacity: 0;
-      animation: fadeIn 2.5s ease forwards;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    p {
-      font-size: 1.3rem;
-      line-height: 1.8rem;
-      margin-bottom: 10rem;
-      white-space: pre-line;
-    }
-
-    p span:first-child {
-      display: block;
-      font-size: 2.2rem;
-      font-weight: 500;
-      margin-bottom: 1.5rem;
-    }
-
-    h1 {
-      font-size: 2.2rem;
-      margin-top: 8rem;
-      margin-bottom: 2rem;
-      font-weight: 500;
-    }
-
-    iframe {
-      width: 90%;
-      max-width: 900px;
-      aspect-ratio: 1912 / 1152;
-      border: none;
-      margin-bottom: 12rem;
-      z-index: 1;
-      transition: opacity 1s ease;
-    }
-
-    @media (max-width: 768px) {
-      p { font-size: 1.1rem; }
-      h1, p span:first-child { font-size: 1.7rem; }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Test background</title>
+<style>
+  :root{--violet:#b94aa6}
+  body{font-family:Arial,Helvetica,sans-serif;margin:0;background:#000;color:var(--violet);text-align:center}
+  .notice{padding:1rem; background:rgba(0,0,0,0.6); color:#fff}
+  #bgImgElem{display:block; width:100%; max-height:60vh; object-fit:contain; margin-bottom:1rem; border:4px solid rgba(255,255,255,0.04)}
+  .content{padding:2rem}
+  .error{color:#ffb3b3}
+  .ok{color:#b3ffdf}
+  .hidden{display:none}
+  /* simple layout with image behind content if it loads properly */
+  #bgFull {
+    position: fixed; inset:0; z-index:-1; width:100%; height:100%; object-fit:cover; display:none;
+  }
+  .behind{position:relative; z-index:1}
+</style>
 </head>
 <body>
-  <!-- 🌄 Le fond défilant -->
-<img class="background" src="background.png" alt="Fond du site" />
-
-  <div class="content">
-    <p>
-      <span>Merci</span>
-Si vous avez accès à ce site c’est que vous avez contribué à la réalisation de ce court métrage
-Merci beaucoup et bon visionnage
-    </p>
-
-    <h1>5 Impasse Nirvana</h1>
-
-    <iframe 
-      id="video"
-      src="https://www.youtube.com/embed/8AljwViu68U?enablejsapi=1&rel=0&showinfo=0&modestbranding=1"
-      allow="autoplay; fullscreen"
-      allowfullscreen>
-    </iframe>
+  <div class="notice">
+    <strong>Diagnostic image `background.png`</strong>
   </div>
 
-  <script>
-    // 🎥 API YouTube : assombrir fond + texte pendant la lecture
-    const tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    document.body.appendChild(tag);
+  <!-- visible test image (shows what browser loads) -->
+  <img id="bgImgElem" src="background.png" alt="test image (raw)" onerror="this.style.display='none'">
 
-    function onYouTubeIframeAPIReady() {
-      new YT.Player('video', {
-        events: { 'onStateChange': onPlayerStateChange }
-      });
+  <div id="status" class="content">
+    <p id="message">Test en cours…</p>
+    <p><small>Si le test échoue, ouvre la console (F12) → onglet Network et regarde la requête `background.png`.</small></p>
+  </div>
+
+  <!-- full-screen background element (will be shown if image loads) -->
+  <img id="bgFull" src="background.png" alt="background full">
+
+  <!-- sample content (your page) -->
+  <div id="site" class="content behind hidden">
+    <p style="font-size:24px; margin-top:2rem;">Merci<br>Si vous avez accès à ce site c’est que vous avez contribué à la réalisation de ce court métrage<br>Merci beaucoup et bon visionnage</p>
+    <h1 style="font-size:36px; margin:2rem 0; color:var(--violet)">5 Impasse Nirvana</h1>
+    <div style="max-width:900px; margin:0 auto;">
+      <iframe id="video" src="https://www.youtube.com/embed/8AljwViu68U?rel=0" allow="autoplay; fullscreen" allowfullscreen style="width:100%;aspect-ratio:1912/1152;border:0"></iframe>
+    </div>
+  </div>
+
+<script>
+(async function(){
+  const status = document.getElementById('message');
+  const testUrl = 'background.png';
+  console.log('→ Diagnostic: je vais tester :', testUrl);
+
+  try {
+    // Try HEAD first (some hosts block HEAD; fallback to GET)
+    let res;
+    try {
+      res = await fetch(testUrl, { method: 'HEAD' });
+      console.log('HEAD response', res);
+    } catch(e) {
+      console.log('HEAD failed, fallback to GET:', e);
+      res = await fetch(testUrl, { method: 'GET' });
     }
 
-    function onPlayerStateChange(event) {
-      const body = document.body;
-      if (event.data === YT.PlayerState.PLAYING) {
-        body.classList.add('darken');
-      } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
-        body.classList.remove('darken');
+    if (res && res.ok) {
+      console.log('Image accessible (HTTP ' + res.status + ')', res);
+      status.innerHTML = '<span class="ok">Image trouvée sur : <code>'+testUrl+'</code> (HTTP '+res.status+')</span>';
+      // show full-screen background and the real site content
+      document.getElementById('bgFull').style.display = 'block';
+      document.getElementById('bgImgElem').style.display = 'none';
+      document.getElementById('site').classList.remove('hidden');
+    } else {
+      const code = res ? res.status : 'no-response';
+      console.warn('Image non trouvée. HTTP:', code);
+      status.innerHTML = '<span class="error">Image introuvable. Requête retournée : '+code+'</span>'
+        +'<br>Vérifie que le fichier <code>background.png</code> est bien commité à la racine du dépôt et que GitHub Pages a fini de déployer.';
+      // show the raw <img> if browser attempted to load it (may be broken)
+      const img = document.getElementById('bgImgElem');
+      if (img.complete && img.naturalWidth>0) {
+        status.innerHTML += '<br><em>Le <code>&lt;img&gt;</code> a chargé OK mais HEAD a échoué — regarde la console Network.</em>';
       }
     }
-  </script>
+  } catch(err) {
+    console.error('Erreur fetch:', err);
+    status.innerHTML = '<span class="error">Erreur lors du test : '+(err.message || err)+'</span>';
+  }
+
+  // Extra debugging instructions for you (visible)
+  const extra = document.createElement('div');
+  extra.className = 'content';
+  extra.innerHTML = `<p>Si l'image n'apparaît pas :</p>
+  <ol style="text-align:left;max-width:800px;margin:0 auto;">
+    <li>Ouvre ton dépôt GitHub → vérifie que <code>background.png</code> est bien dans la branche <strong>main</strong> (ou la branche utilisée par Pages).</li>
+    <li>Va dans Settings → Pages → vérifie que le déploiement est <strong>Active</strong> (et qu'il n'y a pas d'erreur).</li>
+    <li>Ouvre la page publique, appuie <kbd>F12</kbd> → onglet <strong>Network</strong> → recharge (Ctrl+R) → cherche la ligne <code>background.png</code> et regarde le code HTTP (200 ou 404 ou 403?).</li>
+    <li>Si c'est 404 : le fichier n'est pas à la racine ou n'a pas été commité. Si c'est 403 : problème de permission (rare).</li>
+    <li>Vérifie la casse exacte du nom (background.png ≠ Background.PNG).</li>
+    <li>Si tu utilises un dossier, assure-toi que le chemin correspond (ex : <code>images/background.png</code>).</li>
+  </ol>`;
+  document.body.appendChild(extra);
+})();
+</script>
 </body>
 </html>

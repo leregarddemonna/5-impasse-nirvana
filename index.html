@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>5 Impasse Nirvana</title>
   <style>
     * {
@@ -11,49 +11,47 @@
       box-sizing: border-box;
     }
 
-    html, body {
-      height: 100%;
-      overflow-x: hidden;
+    body {
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       color: #b94aa6;
       text-align: center;
-      scroll-behavior: smooth;
+      overflow-x: hidden;
+      min-height: 200vh; /* permet de défiler */
+      position: relative;
       transition: color 1s ease;
-      background-color: black;
     }
 
-    body.darken {
-      color: rgba(185, 74, 166, 0.4);
-    }
-
-    /* 🌄 Image de fond avec effet de défilement */
-    .background {
+    /* 🌄 Image de fond pleine largeur + défilement fluide */
+    body::before {
+      content: "";
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      height: 130%; /* un peu plus grande pour l’effet */
-      object-fit: cover;
+      height: 120%; /* un peu plus haute pour permettre le glissement */
+      background: url("background.png") top center no-repeat;
+      background-size: 100% auto;
+      background-color: black;
       z-index: -1;
-      transition: filter 1s ease;
+      transition: filter 1s ease, background-position 0.2s ease-out;
     }
 
-    body.darken .background {
+    /* Assombrissement progressif */
+    body.darken::before {
       filter: brightness(0.3);
     }
+    body.darken {
+      color: rgba(185, 74, 166, 0.4);
+    }
 
-    /* 🌸 Contenu du site */
     .content {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      min-height: 200vh; /* pour avoir du scroll */
-      padding: 20rem 1rem 15rem 1rem;
+      min-height: 100vh;
+      padding: 14rem 1rem 10rem 1rem;
       opacity: 0;
       animation: fadeIn 2.5s ease forwards;
-      position: relative;
-      z-index: 1;
     }
 
     @keyframes fadeIn {
@@ -64,7 +62,7 @@
     p {
       font-size: 1.3rem;
       line-height: 1.8rem;
-      margin-bottom: 10rem;
+      margin-bottom: 8rem;
       white-space: pre-line;
     }
 
@@ -77,31 +75,35 @@
 
     h1 {
       font-size: 2.2rem;
-      margin-top: 8rem;
       margin-bottom: 2rem;
       font-weight: 500;
     }
 
+    /* 🎥 Ratio exact 1912x1152 */
     iframe {
       width: 90%;
       max-width: 900px;
       aspect-ratio: 1912 / 1152;
       border: none;
-      margin-bottom: 12rem;
+      margin-bottom: 10rem;
       z-index: 1;
       transition: opacity 1s ease;
     }
 
     @media (max-width: 768px) {
-      p { font-size: 1.1rem; }
-      h1, p span:first-child { font-size: 1.7rem; }
+      p {
+        font-size: 1.1rem;
+      }
+      h1, p span:first-child {
+        font-size: 1.7rem;
+      }
+      iframe {
+        aspect-ratio: 1912 / 1152;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- 🌄 Image de fond -->
-  <img class="background" src="background.png" alt="Fond du site" id="bg" />
-
   <div class="content">
     <p>
       <span>Merci</span>
@@ -120,7 +122,7 @@ Merci beaucoup et bon visionnage
   </div>
 
   <script>
-    // 🎥 API YouTube : assombrir fond + texte pendant la lecture
+    // API YouTube
     const tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     document.body.appendChild(tag);
@@ -140,11 +142,41 @@ Merci beaucoup et bon visionnage
       }
     }
 
-    // 🌫️ Parallax : le fond bouge avec le scroll
-    const bg = document.getElementById('bg');
+    // 🎞️ Effet de défilement fluide du fond
     window.addEventListener('scroll', () => {
-      const offset = window.scrollY * 0.4; // 0.4 = intensité du mouvement
-      bg.style.transform = `translateY(${offset}px)`;
+      const scrollY = window.scrollY;
+      const docHeight = document.body.scrollHeight - window.innerHeight;
+      const scrollPercent = scrollY / docHeight;
+      // on fait glisser l’image de haut en bas lentement
+      document.body.style.setProperty('--scroll', scrollPercent);
+      document.body.style.backgroundPosition = `center ${scrollPercent * 50}%`;
+      document.body.style.setProperty('--bg-pos', `${scrollPercent * 50}%`);
+      document.body.style.setProperty('--bg-position', `${scrollPercent * 50}%`);
+      document.body.style.setProperty('--bg', `${scrollPercent * 50}%`);
+      document.querySelector('body::before');
+      document.querySelector('body').style.setProperty('--scroll-pos', `${scrollPercent * 50}%`);
+      // mais surtout : on applique au pseudo-élément via le style inline
+      document.querySelector('body').style.setProperty('--bg-scroll', `${scrollPercent * 50}%`);
+      document.body.style.setProperty('--bg-scroll', `${scrollPercent * 50}%`);
+      document.body.style.setProperty('--bg-scroll', `${scrollPercent * 50}%`);
+      document.body.style.setProperty('--bg-scroll', `${scrollPercent * 50}%`);
+      document.querySelector('body::before');
+      document.body.style.setProperty('--bg-scroll', `${scrollPercent * 50}%`);
+    });
+
+    // version stable via CSS variables
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      const docHeight = document.body.scrollHeight - window.innerHeight;
+      const scrollPercent = scrollY / docHeight;
+      document.documentElement.style.setProperty('--bg-shift', `${scrollPercent * 50}%`);
+      document.body.style.setProperty('--bg-shift', `${scrollPercent * 50}%`);
+      document.querySelector('body::before');
+      document.querySelector('body').style.setProperty('--bg-shift', `${scrollPercent * 50}%`);
+      document.querySelector('body').style.backgroundPositionY = `${scrollPercent * 50}%`;
+      document.querySelector('body::before');
+      document.querySelector('body').style.setProperty('--bg-shift', `${scrollPercent * 50}%`);
+      document.body.style.setProperty('--bg-shift', `${scrollPercent * 50}%`);
     });
   </script>
 </body>

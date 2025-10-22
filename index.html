@@ -18,21 +18,20 @@
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     }
 
-    /* 🌄 Le fond est un vrai élément, pas un pseudo */
+    /* 🌄 Le fond : couvre toute la hauteur de la page, sans crop haut/bas */
     #background {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      height: 120%; /* un peu plus haut que l’écran pour pouvoir glisser */
-      background: url("Capture d'écran 2025-09-10 140417.png") top center no-repeat;
-      background-size: 100% auto; /* pleine largeur */
+      height: 100%;
+      background: url("Capture d'écran 2025-09-10 140417.png") center top no-repeat;
+      background-size: auto 100%; /* On ajuste à la hauteur, quitte à couper sur les côtés */
       background-color: black;
       z-index: -1;
       transition: filter 1s ease;
     }
 
-    /* Le contenu principal */
     body {
       color: #b94aa6;
       text-align: center;
@@ -42,6 +41,7 @@
     body.darken #background {
       filter: brightness(0.3);
     }
+
     body.darken {
       color: rgba(185, 74, 166, 0.4);
     }
@@ -50,7 +50,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 200vh; /* page plus longue pour défiler */
+      min-height: 200vh; /* On peut défiler */
       padding: 14rem 1rem 10rem 1rem;
       opacity: 0;
       animation: fadeIn 2.5s ease forwards;
@@ -119,7 +119,7 @@ Merci beaucoup et bon visionnage
   </div>
 
   <script>
-    // Charger API YouTube
+    // API YouTube
     const tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     document.body.appendChild(tag);
@@ -138,16 +138,6 @@ Merci beaucoup et bon visionnage
         body.classList.remove('darken');
       }
     }
-
-    // 🌅 Défilement fluide du fond
-    window.addEventListener('scroll', () => {
-      const scrollY = window.scrollY;
-      const docHeight = document.body.scrollHeight - window.innerHeight;
-      const scrollPercent = scrollY / docHeight;
-      const bg = document.getElementById('background');
-      // Déplacer l'image verticalement de haut vers bas (0 à 100%)
-      bg.style.backgroundPosition = `center ${scrollPercent * 100}%`;
-    });
   </script>
 </body>
 </html>

@@ -15,21 +15,14 @@
       height: 100%;
       width: 100%;
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      scroll-behavior: smooth;
       color: white;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
       background: url('background.png') no-repeat center center fixed;
       background-size: cover;
-      overflow-x: hidden;
     }
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.35);
-      z-index: -1;
-    }
-
+    /* Retrait du voile gris : on garde le fond pur */
     section {
       width: 100%;
       min-height: 100vh;
@@ -39,6 +32,7 @@
       align-items: center;
       text-align: center;
       padding: 2rem;
+      background: rgba(0, 0, 0, 0.25); /* léger contraste pour lisibilité du texte */
     }
 
     h1 {
@@ -62,7 +56,10 @@
     /* Section vidéo */
     .video-section {
       padding: 4rem 2rem;
-      background: rgba(0, 0, 0, 0.55);
+      background: rgba(0, 0, 0, 0.35);
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .video-wrapper {
@@ -98,6 +95,7 @@
       transform: translate(-50%, -50%);
       opacity: 0.9;
       transition: opacity 0.3s ease;
+      filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
     }
 
     #play-button:hover {
@@ -109,111 +107,4 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      background: black;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 1.5s ease;
-      z-index: 100;
-    }
-
-    #fade-screen.active {
-      opacity: 1;
-      pointer-events: all;
-    }
-  </style>
-</head>
-<body>
-
-  <!-- Texte d’introduction -->
-  <section>
-    <h1>
-      Merci.<br>
-      Si vous avez accès à ce site, c’est que vous avez contribué à la réalisation de ce court métrage.<br>
-      Merci beaucoup et bon visionnage.<br>
-      <strong>5 Impasse Nirvana.</strong>
-    </h1>
-  </section>
-
-  <!-- Vidéo -->
-  <section class="video-section">
-    <div class="video-wrapper" id="videoBox">
-      <img id="thumbnail" src="https://img.youtube.com/vi/zgHc-dJ1eww/maxresdefault.jpg" alt="Miniature du court métrage">
-      <div id="play-button"></div>
-    </div>
-  </section>
-
-  <!-- Écran noir pour le fondu -->
-  <div id="fade-screen"></div>
-
-  <script>
-    const playButton = document.getElementById('play-button');
-    const fadeScreen = document.getElementById('fade-screen');
-
-    // Fonction pour fermer la vidéo et revenir à la page
-    function closeVideo(videoContainer) {
-      fadeScreen.classList.add('active');
-      setTimeout(() => {
-        document.body.removeChild(videoContainer);
-        fadeScreen.classList.remove('active');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 1000);
-    }
-
-    playButton.addEventListener('click', () => {
-      fadeScreen.classList.add('active');
-
-      setTimeout(() => {
-        const videoURL = "https://www.youtube.com/embed/zgHc-dJ1eww?autoplay=1&rel=0&showinfo=0&modestbranding=1&enablejsapi=1";
-        const iframe = document.createElement('iframe');
-        iframe.src = videoURL;
-        iframe.allow = "autoplay";
-        iframe.allowFullscreen = true;
-        iframe.style.width = "100%";
-        iframe.style.height = "100%";
-        iframe.style.border = "none";
-        iframe.id = "video-player";
-
-        const videoContainer = document.createElement('div');
-        Object.assign(videoContainer.style, {
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          backgroundColor: "black",
-          zIndex: 200,
-          opacity: 0,
-          transition: "opacity 1.5s ease"
-        });
-        videoContainer.appendChild(iframe);
-        document.body.appendChild(videoContainer);
-
-        // Transition douce vers la vidéo
-        setTimeout(() => { videoContainer.style.opacity = 1; fadeScreen.classList.remove('active'); }, 500);
-
-        // Fermer quand la vidéo se termine (YouTube API)
-        window.onYouTubeIframeAPIReady = function() {
-          const player = new YT.Player('video-player', {
-            events: {
-              'onStateChange': (event) => {
-                if (event.data === YT.PlayerState.ENDED) {
-                  closeVideo(videoContainer);
-                }
-              }
-            }
-          });
-        };
-
-        // Charger l’API YouTube
-        const tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        document.body.appendChild(tag);
-
-      }, 1000);
-    });
-  </script>
-
-</body>
-</html>
+      width

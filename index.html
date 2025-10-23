@@ -1,152 +1,272 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>5 Impasse Nirvana</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5 Impasse Nirvana</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body {
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      color: #b94aa6;
-      text-align: center;
-      overflow-x: hidden;
-      min-height: 200vh;
-      position: relative;
-      transition: color 1s ease;
-    }
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            overflow-x: hidden;
+            background: #a8ddd0;
+        }
 
-    /* 🌄 Image de fond pleine largeur + défilement fluide */
-    body::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 120%;
-      background: url("background.png") center 0 no-repeat;
-      background-size: contain;
-      background-color: black;
-      z-index: -1;
-      transition: filter 1s ease, background-position 0.2s ease-out;
-    }
+        .parallax-container {
+            height: 300vh;
+            position: relative;
+        }
 
-    /* Assombrissement progressif */
-    body.darken::before {
-      filter: brightness(0.3);
-    }
-    body.darken {
-      color: rgba(185, 74, 166, 0.4);
-    }
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-image: url('background.jpg');
+            background-size: cover;
+            background-position: center top;
+            transition: opacity 0.5s ease, filter 0.5s ease;
+            z-index: -1;
+        }
 
-    .content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      padding: 14rem 1rem 10rem 1rem;
-      opacity: 0;
-      animation: fadeIn 2.5s ease forwards;
-    }
+        .background.dimmed {
+            filter: brightness(0.3);
+        }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+        .content {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
 
-    p {
-      font-size: 1.3rem;
-      line-height: 1.8rem;
-      margin-bottom: 2rem;
-      white-space: pre-line;
-    }
+        .text-container {
+            text-align: center;
+            color: #c94a9c;
+            max-width: 800px;
+            margin-bottom: 60px;
+            opacity: 0;
+            animation: fadeIn 2s ease-in forwards;
+            animation-delay: 0.5s;
+            transition: opacity 0.5s ease;
+        }
 
-    p span:first-child {
-      display: block;
-      font-size: 2.2rem;
-      font-weight: 500;
-      margin-bottom: 1.5rem;
-    }
+        .text-container.dimmed {
+            opacity: 0.3;
+        }
 
-    h1 {
-      font-size: 2.2rem;
-      margin-bottom: 2rem;
-      font-weight: 500;
-    }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-    iframe {
-      width: 90%;
-      max-width: 900px;
-      aspect-ratio: 1912 / 1152;
-      border: none;
-      margin-bottom: 10rem;
-      z-index: 1;
-      transition: opacity 1s ease;
-    }
+        .text-container h1 {
+            font-size: 3em;
+            font-weight: 300;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+        }
 
-    @media (max-width: 768px) {
-      p { font-size: 1.1rem; }
-      h1, p span:first-child { font-size: 1.7rem; }
-      iframe { aspect-ratio: 1912 / 1152; }
-    }
-  </style>
+        .text-container p {
+            font-size: 1.5em;
+            font-weight: 300;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .video-container {
+            position: relative;
+            width: 90%;
+            max-width: 900px;
+            opacity: 0;
+            animation: fadeIn 2s ease-in forwards;
+            animation-delay: 1s;
+        }
+
+        .video-thumbnail {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            cursor: pointer;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .video-thumbnail img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .play-button:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .play-button::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 25px solid #c94a9c;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            margin-left: 5px;
+        }
+
+        .video-player {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 1200px;
+            z-index: 1000;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .video-player.active {
+            display: block;
+        }
+
+        .video-player iframe {
+            width: 100%;
+            height: 675px;
+            border: none;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .text-container h1 {
+                font-size: 2em;
+            }
+
+            .text-container p {
+                font-size: 1.2em;
+            }
+
+            .play-button {
+                width: 60px;
+                height: 60px;
+            }
+
+            .play-button::after {
+                border-left: 18px solid #c94a9c;
+                border-top: 11px solid transparent;
+                border-bottom: 11px solid transparent;
+            }
+
+            .video-player iframe {
+                height: 50vh;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="content">
-    <p>
-      <span>Merci</span>
-Si vous avez accès à ce site c’est que vous avez contribué à la réalisation de ce court métrage
-Merci beaucoup et bon visionnage
-    </p>
+    <div class="parallax-container">
+        <div class="background" id="background"></div>
+        
+        <div class="content">
+            <div class="text-container" id="textContainer">
+                <h1>Merci</h1>
+                <p>Si vous avez accès à ce site c'est que vous avez contribué</p>
+                <p>à la réalisation de ce court métrage</p>
+                <p>Merci beaucoup, bon visionnage</p>
+                <p><strong>5 Impasse Nirvana.</strong></p>
+            </div>
 
-    <h1>5 Impasse Nirvana</h1>
+            <div class="video-container">
+                <div class="video-thumbnail" id="thumbnail">
+                    <img src="https://img.youtube.com/vi/8AljwViu68U/maxresdefault.jpg" alt="5 Impasse Nirvana">
+                    <div class="play-button"></div>
+                </div>
+                
+                <div class="video-player" id="videoPlayer">
+                    <iframe id="youtubeIframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <iframe 
-      id="video"
-      src="https://www.youtube.com/embed/8AljwViu68U?enablejsapi=1&rel=0&showinfo=0&modestbranding=1"
-      allow="autoplay; fullscreen"
-      allowfullscreen>
-    </iframe>
-  </div>
+    <script>
+        const background = document.getElementById('background');
+        const textContainer = document.getElementById('textContainer');
+        const thumbnail = document.getElementById('thumbnail');
+        const videoPlayer = document.getElementById('videoPlayer');
+        const youtubeIframe = document.getElementById('youtubeIframe');
 
-  <script>
-    // API YouTube
-    const tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    document.body.appendChild(tag);
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallaxSpeed = 0.5;
+            background.style.backgroundPositionY = -(scrolled * parallaxSpeed) + 'px';
+        });
 
-    function onYouTubeIframeAPIReady() {
-      new YT.Player('video', {
-        events: { 'onStateChange': onPlayerStateChange }
-      });
-    }
+        thumbnail.addEventListener('click', () => {
+            youtubeIframe.src = 'https://www.youtube.com/embed/8AljwViu68U?autoplay=1&rel=0&modestbranding=1';
+            videoPlayer.classList.add('active');
+            background.classList.add('dimmed');
+            textContainer.classList.add('dimmed');
+            thumbnail.style.display = 'none';
+        });
 
-    function onPlayerStateChange(event) {
-      const body = document.body;
-      if (event.data === YT.PlayerState.PLAYING) {
-        body.classList.add('darken');
-      } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
-        body.classList.remove('darken');
-      }
-    }
+        window.addEventListener('message', (event) => {
+            if (event.data === '{"event":"command","func":"pauseVideo","args":""}') {
+                background.classList.remove('dimmed');
+                textContainer.classList.remove('dimmed');
+            } else if (event.data.includes('"event":"onStateChange"')) {
+                const data = JSON.parse(event.data);
+                if (data.info === 2) {
+                    background.classList.remove('dimmed');
+                    textContainer.classList.remove('dimmed');
+                }
+            }
+        });
 
-    // 🌠 Parallax : le fond défile plus lentement que la page
-    window.addEventListener('scroll', () => {
-      const scrollY = window.scrollY;
-      const parallaxSpeed = 0.5; // 💫 plus petit = plus lent
-      const bgPosition = scrollY * parallaxSpeed;
-      document.body.style.setProperty('--bg-shift', `${bgPosition}px`);
-      document.querySelector('body').style.setProperty('--bg-shift', `${bgPosition}px`);
-      document.body.style.backgroundPositionY = `${bgPosition}px`;
-      // Met à jour le pseudo-élément via une variable CSS
-      document.body.style.setProperty('--bg-pos', `${bgPosition}px`);
-      document.querySelector('style').innerHTML += `body::before{background-position:center ${bgPosition}px !important}`;
-    });
-  </script>
+        document.addEventListener('click', (e) => {
+            if (e.target === videoPlayer) {
+                videoPlayer.classList.remove('active');
+                youtubeIframe.src = '';
+                background.classList.remove('dimmed');
+                textContainer.classList.remove('dimmed');
+                thumbnail.style.display = 'block';
+            }
+        });
+    </script>
 </body>
 </html>

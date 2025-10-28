@@ -39,6 +39,7 @@
 
         .background.dimmed {
             filter: brightness(0.3);
+            transition: filter 1.5s ease;
         }
 
         .content {
@@ -56,7 +57,7 @@
             color: #000000;
             max-width: 800px;
             margin-bottom: 80px;
-            margin-top: 40px;
+            margin-top: 80px;
             opacity: 0;
             animation: fadeIn 2s ease-in forwards;
             animation-delay: 0.5s;
@@ -98,6 +99,7 @@
             opacity: 0;
             animation: fadeIn 2s ease-in forwards;
             animation-delay: 1s;
+            position: relative;
         }
 
         .video-title {
@@ -107,6 +109,11 @@
             font-weight: 300;
             margin-bottom: 50px;
             letter-spacing: 2px;
+            transition: color 1.5s ease;
+        }
+
+        .video-title.dimmed {
+            color: #000000;
         }
 
         .video-container {
@@ -231,6 +238,7 @@
     <script>
         const background = document.getElementById('background');
         const textContainer = document.getElementById('textContainer');
+        const videoTitle = document.querySelector('.video-title');
         const thumbnail = document.getElementById('thumbnail');
         const videoPlayer = document.getElementById('videoPlayer');
         const youtubeIframe = document.getElementById('youtubeIframe');
@@ -249,10 +257,11 @@
         window.addEventListener('scroll', updateParallax);
 
         thumbnail.addEventListener('click', () => {
-            youtubeIframe.src = 'https://www.youtube.com/embed/8AljwViu68U?autoplay=1&rel=0&modestbranding=1';
+            youtubeIframe.src = 'https://www.youtube.com/embed/8AljwViu68U?autoplay=1&rel=0&modestbranding=1&enablejsapi=1';
             videoPlayer.classList.add('active');
             background.classList.add('dimmed');
             textContainer.classList.add('dimmed');
+            videoTitle.classList.add('dimmed');
             thumbnail.style.opacity = '0';
             setTimeout(() => {
                 thumbnail.style.display = 'none';
@@ -260,18 +269,25 @@
         });
 
         window.addEventListener('message', (event) => {
-            if (event.data === '{"event":"command","func":"pauseVideo","args":""}') {
-                background.classList.remove('dimmed');
-                textContainer.classList.remove('dimmed');
-            } else if (event.data.includes('"event":"onStateChange"')) {
-                try {
+            try {
+                if (typeof event.data === 'string') {
                     const data = JSON.parse(event.data);
-                    if (data.info === 2) {
-                        background.classList.remove('dimmed');
-                        textContainer.classList.remove('dimmed');
+                    if (data.event === 'onStateChange') {
+                        // 2 = paused
+                        if (data.info === 2) {
+                            background.classList.remove('dimmed');
+                            textContainer.classList.remove('dimmed');
+                            videoTitle.classList.remove('dimmed');
+                        }
+                        // 1 = playing
+                        else if (data.info === 1) {
+                            background.classList.add('dimmed');
+                            textContainer.classList.add('dimmed');
+                            videoTitle.classList.add('dimmed');
+                        }
                     }
-                } catch (e) {}
-            }
+                }
+            } catch (e) {}
         });
 
         document.addEventListener('keydown', (e) => {
@@ -285,6 +301,7 @@
             youtubeIframe.src = '';
             background.classList.remove('dimmed');
             textContainer.classList.remove('dimmed');
+            videoTitle.classList.remove('dimmed');
             thumbnail.style.display = 'block';
             setTimeout(() => {
                 thumbnail.style.opacity = '1';

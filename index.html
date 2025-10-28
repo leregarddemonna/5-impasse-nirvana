@@ -119,16 +119,20 @@
         .video-container {
             position: relative;
             width: 100%;
+            padding-bottom: 60.24%;
         }
 
         .video-thumbnail {
-            position: relative;
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            padding-bottom: 60.24%;
+            height: 100%;
             cursor: pointer;
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            transition: opacity 0.3s ease;
         }
 
         .video-thumbnail img {

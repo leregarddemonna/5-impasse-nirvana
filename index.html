@@ -30,14 +30,15 @@
       background-size: cover;
       z-index: -1;
       transition: filter 1.5s ease, background-position 0.3s ease-out;
+      filter: brightness(0.3); /* 🌑 sombre au chargement */
     }
 
-    /* 🌗 État assombri (par défaut et pendant lecture) */
+    /* 🌗 État assombri pendant la lecture */
     body.darken .background {
       filter: brightness(0.3);
     }
 
-    /* ☀️ État clair après chargement de la vidéo */
+    /* ☀️ État éclairci après chargement */
     body.loaded .background {
       filter: brightness(1);
     }
@@ -146,7 +147,7 @@
       transform: translate(-50%, -50%);
       width: 0;
       height: 0;
-      border-left: 40px solid #ffffff; /* ▶️ triangle blanc */
+      border-left: 40px solid #ffffff;
       border-top: 25px solid transparent;
       border-bottom: 25px solid transparent;
       cursor: pointer;
@@ -200,7 +201,7 @@
     }
   </style>
 </head>
-<body class="darken"> <!-- 🌑 Commence sombre -->
+<body class="darken"> <!-- 🌑 commence sombre -->
   <div class="background" id="background"></div>
 
   <div class="content">
@@ -238,6 +239,14 @@
     const body = document.body;
     let player;
 
+    // 🌅 Effet de claircissement progressif à l’arrivée
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        body.classList.add('loaded');  // passe de sombre à clair
+        body.classList.remove('darken');
+      }, 800); // délai pour effet doux
+    });
+
     // 🎞️ Parallaxe fluide du fond (plus rapide)
     window.addEventListener('scroll', () => {
       const scrollY = window.scrollY;
@@ -251,20 +260,16 @@
     tag.src = "https://www.youtube.com/iframe_api";
     document.body.appendChild(tag);
 
-    // ✅ Prépare le lecteur et retire le mode sombre une fois chargé
+    // ✅ Prépare le lecteur (non muet)
     function onYouTubeIframeAPIReady() {
       player = new YT.Player('youtubeIframe', {
         events: {
           'onReady': (event) => {
-            // Précharge rapidement pour que le lecteur soit prêt
+            // Précharge rapidement pour instantanéité
             event.target.playVideo();
             setTimeout(() => {
               event.target.pauseVideo();
               event.target.seekTo(0);
-
-              // 🌅 Retire le mode sombre dès que la vidéo est prête
-              body.classList.remove('darken');
-              body.classList.add('loaded');
             }, 1000);
           },
           'onStateChange': onPlayerStateChange

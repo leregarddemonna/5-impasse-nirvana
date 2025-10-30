@@ -1,306 +1,270 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>5 Impasse Nirvana</title>
-    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5 Impasse Nirvana</title>
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            font-family: 'Work Sans', sans-serif;
-            overflow-x: hidden;
-            background: #a8ddd0;
-            transition: color 1s ease;
-        }
+    body {
+      font-family: 'Work Sans', sans-serif;
+      overflow-x: hidden;
+      background: #a8ddd0;
+      transition: color 1s ease;
+    }
 
-        .parallax-container {
-            min-height: 100vh;
-            position: relative;
-        }
+    /* 🏞️ Image de fond avec parallaxe */
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 120%;
+      background: url("background.png") center top no-repeat;
+      background-size: cover;
+      z-index: -1;
+      transition: filter 1s ease, background-position 0.3s ease-out;
+    }
 
-        .background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background-image: url('background.png');
-            background-size: cover;
-            background-position: center top;
-            background-repeat: no-repeat;
-            transition: filter 1s ease, background-position 0.3s ease;
-            z-index: -1;
-        }
+    /* 🌗 Assombrissement à la lecture */
+    body.darken .background {
+      filter: brightness(0.3);
+    }
 
-        /* 🌗 Effet d’assombrissement global via <body class="darken"> */
-        body.darken .background {
-            filter: brightness(0.3);
-        }
+    body.darken .text-container {
+      opacity: 0.3;
+    }
 
-        body.darken .text-container {
-            opacity: 0.3;
-        }
+    body.darken .video-title {
+      color: #000;
+    }
 
-        body.darken .video-title {
-            color: #000000;
-        }
+    .content {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 120px 20px 60px;
+    }
 
-        .content {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 120px 20px 60px;
-        }
+    .text-container {
+      text-align: center;
+      color: #000;
+      max-width: 800px;
+      margin-top: 100px;
+      margin-bottom: 80px;
+      opacity: 0;
+      animation: fadeIn 1.5s ease-in forwards;
+    }
 
-        .text-container {
-            text-align: center;
-            color: #000000;
-            max-width: 800px;
-            margin-bottom: 80px;
-            margin-top: 100px; /* espace au-dessus du texte */
-            opacity: 0;
-            animation: fadeIn 1.5s ease-in forwards;
-            animation-delay: 0s;
-            transition: opacity 1s ease;
-        }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    .text-container h1 {
+      font-size: 3em;
+      font-weight: 300;
+      margin-bottom: 25px;
+    }
 
-        .text-container h1 {
-            font-size: 3em;
-            font-weight: 300;
-            margin-bottom: 25px;
-            letter-spacing: 1px;
-        }
+    .text-container p {
+      font-size: 1.5em;
+      font-weight: 300;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
 
-        .text-container p {
-            font-size: 1.5em;
-            font-weight: 300;
-            line-height: 1.4;
-            margin-bottom: 8px;
-        }
+    .video-section {
+      width: 90%;
+      max-width: 900px;
+      position: relative;
+    }
 
-        .video-section {
-            width: 90%;
-            max-width: 700px;
-            opacity: 0;
-            animation: fadeIn 2s ease-in forwards;
-            animation-delay: 0.8s;
-            position: relative;
-        }
+    .video-title {
+      text-align: center;
+      color: #c94a9c;
+      font-size: 3.5em;
+      font-weight: 300;
+      margin-bottom: 50px;
+      transition: color 1.5s ease;
+    }
 
-        .video-title {
-            text-align: center;
-            color: #c94a9c;
-            font-size: 3.5em;
-            font-weight: 300;
-            margin-bottom: 50px;
-            letter-spacing: 2px;
-            transition: color 1.5s ease;
-        }
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: calc(100% / 1.66); /* ✅ ratio 1.66:1 */
+    }
 
-        .video-container {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%;
-        }
+    .video-thumbnail {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      transition: opacity 0.8s ease;
+    }
 
-        .video-thumbnail {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            transition: opacity 0.8s ease;
-        }
+    .video-thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-        .video-thumbnail img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+    .play-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 0;
+      height: 0;
+      border-left: 40px solid #ffffff; /* ▶️ triangle blanc */
+      border-top: 25px solid transparent;
+      border-bottom: 25px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-left: 8px;
+    }
 
-        .play-button {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 0;
-            height: 0;
-            border-left: 40px solid #ffffff; /* ▶️ triangle blanc */
-            border-top: 25px solid transparent;
-            border-bottom: 25px solid transparent;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-left: 8px;
-        }
+    .play-button:hover {
+      transform: translate(-50%, -50%) scale(1.2);
+    }
 
-        .play-button:hover {
-            transform: translate(-50%, -50%) scale(1.2);
-        }
+    .video-player {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      border-radius: 8px;
+      overflow: hidden;
+    }
 
-        .video-player {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            display: none;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-            overflow: hidden;
-        }
+    .video-player.active {
+      display: block;
+    }
 
-        .video-player.active {
-            display: block;
-        }
+    .video-player iframe {
+      width: 100%;
+      height: 100%;
+      border: none; /* ✅ supprime la ligne claire */
+      display: block;
+    }
 
-        .video-player iframe {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            border: none;
-        }
+    @media (max-width: 768px) {
+      .text-container h1 {
+        font-size: 2em;
+      }
 
-        @media (max-width: 768px) {
-            .text-container h1 {
-                font-size: 2em;
-            }
+      .text-container p {
+        font-size: 1.2em;
+      }
 
-            .text-container p {
-                font-size: 1.2em;
-            }
+      .video-title {
+        font-size: 2em;
+        margin-bottom: 30px;
+      }
 
-            .video-title {
-                font-size: 2em;
-                margin-bottom: 30px;
-            }
-
-            .video-section {
-                max-width: 95%;
-            }
-
-            .play-button {
-                border-left: 30px solid #ffffff;
-                border-top: 18px solid transparent;
-                border-bottom: 18px solid transparent;
-            }
-        }
-    </style>
+      .play-button {
+        border-left: 30px solid #ffffff;
+        border-top: 18px solid transparent;
+        border-bottom: 18px solid transparent;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="parallax-container">
-        <div class="background" id="background"></div>
+  <div class="background" id="background"></div>
 
-        <div class="content">
-            <div class="text-container" id="textContainer">
-                <h1>Merci</h1>
-                <p>Si vous avez accès à ce site c'est que vous avez contribué</p>
-                <p>à la réalisation de ce court métrage</p>
-                <p>Merci beaucoup, bon visionnage</p>
-            </div>
-
-            <div class="video-section">
-                <h2 class="video-title">5 Impasse Nirvana</h2>
-
-                <div class="video-container">
-                    <div class="video-thumbnail" id="thumbnail">
-                        <img src="https://img.youtube.com/vi/8AljwViu68U/maxresdefault.jpg" alt="5 Impasse Nirvana">
-                        <div class="play-button"></div>
-                    </div>
-
-                    <div class="video-player" id="videoPlayer">
-                        <iframe id="youtubeIframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="content">
+    <div class="text-container" id="textContainer">
+      <h1>Merci</h1>
+      <p>Si vous avez accès à ce site c'est que vous avez contribué</p>
+      <p>à la réalisation de ce court métrage</p>
+      <p>Merci beaucoup, bon visionnage</p>
     </div>
 
-    <script>
-        const background = document.getElementById('background');
-        const textContainer = document.getElementById('textContainer');
-        const videoTitle = document.querySelector('.video-title');
-        const thumbnail = document.getElementById('thumbnail');
-        const videoPlayer = document.getElementById('videoPlayer');
-        const youtubeIframe = document.getElementById('youtubeIframe');
-        const body = document.body;
+    <div class="video-section">
+      <h2 class="video-title">5 Impasse Nirvana</h2>
 
-        // Parallaxe du fond
-        function updateParallax() {
-            const scrolled = window.pageYOffset;
-            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const scrollPercentage = scrolled / docHeight;
-            const maxScroll = 30;
-            const bgPosition = scrollPercentage * maxScroll;
-            background.style.backgroundPosition = `center ${bgPosition}%`;
-        }
-        window.addEventListener('scroll', updateParallax);
+      <div class="video-container">
+        <div class="video-thumbnail" id="thumbnail">
+          <img src="https://img.youtube.com/vi/8AljwViu68U/maxresdefault.jpg" alt="5 Impasse Nirvana">
+          <div class="play-button"></div>
+        </div>
 
-        // Charger l’API YouTube
-        const tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        document.body.appendChild(tag);
+        <div class="video-player" id="videoPlayer">
+          <iframe id="youtubeIframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        let player;
+  <script>
+    const background = document.getElementById('background');
+    const thumbnail = document.getElementById('thumbnail');
+    const videoPlayer = document.getElementById('videoPlayer');
+    const youtubeIframe = document.getElementById('youtubeIframe');
+    const body = document.body;
+    let player;
 
-        // Quand on clique sur la miniature
-        thumbnail.addEventListener('click', () => {
-            thumbnail.style.opacity = '0';
-            setTimeout(() => {
-                thumbnail.style.display = 'none';
-                videoPlayer.classList.add('active');
-                if (!player) {
-                    youtubeIframe.src = 'https://www.youtube.com/embed/8AljwViu68U?enablejsapi=1&rel=0&modestbranding=1';
-                    player = new YT.Player('youtubeIframe', {
-                        events: { 'onStateChange': onPlayerStateChange }
-                    });
-                } else {
-                    player.playVideo();
-                }
-            }, 800);
-        });
+    // 🎞️ Parallaxe fluide du fond
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      const docHeight = document.body.scrollHeight - window.innerHeight;
+      const scrollPercent = scrollY / docHeight;
+      background.style.backgroundPosition = `center ${scrollPercent * 50}%`;
+    });
 
-        // Quand la vidéo change d’état (lecture/pause)
-        function onPlayerStateChange(event) {
-            if (event.data === YT.PlayerState.PLAYING) {
-                body.classList.add('darken');
-            } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
-                body.classList.remove('darken');
-            }
-        }
+    // 📦 Charger l’API YouTube
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    document.body.appendChild(tag);
 
-        // Fermeture manuelle (optionnelle)
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && videoPlayer.classList.contains('active')) {
-                player.stopVideo();
-                body.classList.remove('darken');
-            }
-        });
-    </script>
-    <script src="https://www.youtube.com/iframe_api"></script>
+    // ▶️ Lecture au premier clic
+    thumbnail.addEventListener('click', () => {
+      thumbnail.style.opacity = '0';
+      setTimeout(() => {
+        thumbnail.style.display = 'none';
+        videoPlayer.classList.add('active');
+        youtubeIframe.src = "https://www.youtube.com/embed/8AljwViu68U?enablejsapi=1&autoplay=1&rel=0&modestbranding=1";
+      }, 800);
+    });
+
+    // 📺 API YouTube
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('youtubeIframe', {
+        events: { 'onStateChange': onPlayerStateChange }
+      });
+    }
+
+    function onPlayerStateChange(event) {
+      if (event.data === YT.PlayerState.PLAYING) {
+        body.classList.add('darken');
+      } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+        body.classList.remove('darken');
+      }
+    }
+
+    // 🔚 Sortie avec Échap (optionnelle)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && player) {
+        player.stopVideo();
+        body.classList.remove('darken');
+      }
+    });
+  </script>
 </body>
 </html>

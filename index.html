@@ -16,7 +16,7 @@
       font-family: 'Work Sans', sans-serif;
       overflow-x: hidden;
       background: #a8ddd0;
-      transition: background 1s ease, color 1s ease;
+      transition: color 1s ease;
     }
 
     /* 🏞️ Image de fond avec parallaxe */
@@ -29,18 +29,12 @@
       background: url("background.png") center top no-repeat;
       background-size: cover;
       z-index: -1;
-      transition: filter 1.5s ease, background-position 0.3s ease-out;
-      filter: brightness(0.3); /* 🌑 sombre au chargement */
+      transition: filter 1s ease, background-position 0.3s ease-out;
     }
 
-    /* 🌗 État assombri pendant la lecture */
+    /* 🌗 Assombrissement uniquement pendant la lecture */
     body.darken .background {
       filter: brightness(0.3);
-    }
-
-    /* ☀️ État éclairci après chargement */
-    body.loaded .background {
-      filter: brightness(1);
     }
 
     body.darken .text-container {
@@ -58,7 +52,6 @@
       justify-content: center;
       align-items: center;
       padding: 120px 20px 200px; /* espace bas de page */
-      transition: opacity 1s ease;
     }
 
     /* 🌅 Texte d'intro (fondu sans mouvement) */
@@ -70,7 +63,6 @@
       margin-bottom: 80px;
       opacity: 0;
       animation: fadeInOnly 1.5s ease-in forwards;
-      animation-delay: 0.5s;
     }
 
     @keyframes fadeInOnly {
@@ -97,7 +89,7 @@
       position: relative;
       opacity: 0;
       animation: fadeInOnly 2s ease-in forwards;
-      animation-delay: 1s;
+      animation-delay: 0.8s;
     }
 
     .video-title {
@@ -147,7 +139,7 @@
       transform: translate(-50%, -50%);
       width: 0;
       height: 0;
-      border-left: 40px solid #ffffff;
+      border-left: 40px solid #ffffff; /* ▶️ triangle blanc */
       border-top: 25px solid transparent;
       border-bottom: 25px solid transparent;
       cursor: pointer;
@@ -201,7 +193,7 @@
     }
   </style>
 </head>
-<body class="darken"> <!-- 🌑 commence sombre -->
+<body>
   <div class="background" id="background"></div>
 
   <div class="content">
@@ -239,14 +231,6 @@
     const body = document.body;
     let player;
 
-    // 🌅 Effet de claircissement progressif à l’arrivée
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        body.classList.add('loaded');  // passe de sombre à clair
-        body.classList.remove('darken');
-      }, 800); // délai pour effet doux
-    });
-
     // 🎞️ Parallaxe fluide du fond (plus rapide)
     window.addEventListener('scroll', () => {
       const scrollY = window.scrollY;
@@ -260,12 +244,12 @@
     tag.src = "https://www.youtube.com/iframe_api";
     document.body.appendChild(tag);
 
-    // ✅ Prépare le lecteur (non muet)
+    // ✅ Prépare le lecteur sans muet et sans assombrir le site
     function onYouTubeIframeAPIReady() {
       player = new YT.Player('youtubeIframe', {
         events: {
           'onReady': (event) => {
-            // Précharge rapidement pour instantanéité
+            // Précharge la vidéo (on joue rapidement pour que le lecteur soit prêt)
             event.target.playVideo();
             setTimeout(() => {
               event.target.pauseVideo();
@@ -283,9 +267,9 @@
       setTimeout(() => {
         thumbnail.style.display = 'none';
         if (player && player.playVideo) {
-          player.playVideo(); // démarre immédiatement
+          player.playVideo(); // 🚀 démarre immédiatement
         }
-        body.classList.add('darken'); // assombrir pendant lecture
+        body.classList.add('darken'); // assombrit uniquement après clic
       }, 300);
     });
 

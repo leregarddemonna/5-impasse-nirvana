@@ -16,7 +16,7 @@
       font-family: 'Work Sans', sans-serif;
       overflow-x: hidden;
       background: #a8ddd0;
-      transition: color 1s ease;
+      transition: background 1s ease, color 1s ease;
     }
 
     /* 🏞️ Image de fond avec parallaxe */
@@ -29,12 +29,17 @@
       background: url("background.png") center top no-repeat;
       background-size: cover;
       z-index: -1;
-      transition: filter 1s ease, background-position 0.3s ease-out;
+      transition: filter 1.5s ease, background-position 0.3s ease-out;
     }
 
-    /* 🌗 Assombrissement uniquement pendant la lecture */
+    /* 🌗 État assombri (par défaut et pendant lecture) */
     body.darken .background {
       filter: brightness(0.3);
+    }
+
+    /* ☀️ État clair après chargement de la vidéo */
+    body.loaded .background {
+      filter: brightness(1);
     }
 
     body.darken .text-container {
@@ -52,6 +57,7 @@
       justify-content: center;
       align-items: center;
       padding: 120px 20px 200px; /* espace bas de page */
+      transition: opacity 1s ease;
     }
 
     /* 🌅 Texte d'intro (fondu sans mouvement) */
@@ -63,6 +69,7 @@
       margin-bottom: 80px;
       opacity: 0;
       animation: fadeInOnly 1.5s ease-in forwards;
+      animation-delay: 0.5s;
     }
 
     @keyframes fadeInOnly {
@@ -89,7 +96,7 @@
       position: relative;
       opacity: 0;
       animation: fadeInOnly 2s ease-in forwards;
-      animation-delay: 0.8s;
+      animation-delay: 1s;
     }
 
     .video-title {
@@ -193,7 +200,7 @@
     }
   </style>
 </head>
-<body>
+<body class="darken"> <!-- 🌑 Commence sombre -->
   <div class="background" id="background"></div>
 
   <div class="content">
@@ -244,16 +251,20 @@
     tag.src = "https://www.youtube.com/iframe_api";
     document.body.appendChild(tag);
 
-    // ✅ Prépare le lecteur sans muet et sans assombrir le site
+    // ✅ Prépare le lecteur et retire le mode sombre une fois chargé
     function onYouTubeIframeAPIReady() {
       player = new YT.Player('youtubeIframe', {
         events: {
           'onReady': (event) => {
-            // Précharge la vidéo (on joue rapidement pour que le lecteur soit prêt)
+            // Précharge rapidement pour que le lecteur soit prêt
             event.target.playVideo();
             setTimeout(() => {
               event.target.pauseVideo();
               event.target.seekTo(0);
+
+              // 🌅 Retire le mode sombre dès que la vidéo est prête
+              body.classList.remove('darken');
+              body.classList.add('loaded');
             }, 1000);
           },
           'onStateChange': onPlayerStateChange
@@ -267,9 +278,9 @@
       setTimeout(() => {
         thumbnail.style.display = 'none';
         if (player && player.playVideo) {
-          player.playVideo(); // 🚀 démarre immédiatement
+          player.playVideo(); // démarre immédiatement
         }
-        body.classList.add('darken'); // assombrit uniquement après clic
+        body.classList.add('darken'); // assombrir pendant lecture
       }, 300);
     });
 

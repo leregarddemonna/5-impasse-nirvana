@@ -16,6 +16,7 @@
             font-family: 'Work Sans', sans-serif;
             overflow-x: hidden;
             background: #a8ddd0;
+            transition: color 1s ease;
         }
 
         .parallax-container {
@@ -33,13 +34,21 @@
             background-size: cover;
             background-position: center top;
             background-repeat: no-repeat;
-            transition: opacity 0.5s ease, filter 0.5s ease;
+            transition: filter 1s ease, background-position 0.3s ease;
             z-index: -1;
         }
 
-        .background.dimmed {
+        /* 🌗 Effet d’assombrissement global via <body class="darken"> */
+        body.darken .background {
             filter: brightness(0.3);
-            transition: filter 1.5s ease;
+        }
+
+        body.darken .text-container {
+            opacity: 0.3;
+        }
+
+        body.darken .video-title {
+            color: #000000;
         }
 
         .content {
@@ -57,15 +66,11 @@
             color: #000000;
             max-width: 800px;
             margin-bottom: 80px;
-            margin-top: 40px;
+            margin-top: 100px; /* espace au-dessus du texte */
             opacity: 0;
-            animation: fadeIn 2s ease-in forwards;
+            animation: fadeIn 1.5s ease-in forwards;
             animation-delay: 0s;
-            transition: opacity 0.5s ease;
-        }
-
-        .text-container.dimmed {
-            opacity: 0.3;
+            transition: opacity 1s ease;
         }
 
         @keyframes fadeIn {
@@ -98,7 +103,7 @@
             max-width: 700px;
             opacity: 0;
             animation: fadeIn 2s ease-in forwards;
-            animation-delay: 1s;
+            animation-delay: 0.8s;
             position: relative;
         }
 
@@ -112,14 +117,10 @@
             transition: color 1.5s ease;
         }
 
-        .video-title.dimmed {
-            color: #000000;
-        }
-
         .video-container {
             position: relative;
             width: 100%;
-            padding-bottom: 60.24%;
+            padding-bottom: 56.25%;
         }
 
         .video-thumbnail {
@@ -132,7 +133,7 @@
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            transition: opacity 0.3s ease;
+            transition: opacity 0.8s ease;
         }
 
         .video-thumbnail img {
@@ -151,7 +152,7 @@
             transform: translate(-50%, -50%);
             width: 0;
             height: 0;
-            border-left: 40px solid #ffffff;
+            border-left: 40px solid #ffffff; /* ▶️ triangle blanc */
             border-top: 25px solid transparent;
             border-bottom: 25px solid transparent;
             cursor: pointer;
@@ -180,7 +181,7 @@
 
         .video-player iframe {
             width: 100%;
-            aspect-ratio: 1.66 / 1;
+            aspect-ratio: 16 / 9;
             border: none;
         }
 
@@ -203,7 +204,7 @@
             }
 
             .play-button {
-                border-left: 30px solid #000000;
+                border-left: 30px solid #ffffff;
                 border-top: 18px solid transparent;
                 border-bottom: 18px solid transparent;
             }
@@ -213,7 +214,7 @@
 <body>
     <div class="parallax-container">
         <div class="background" id="background"></div>
-        
+
         <div class="content">
             <div class="text-container" id="textContainer">
                 <h1>Merci</h1>
@@ -224,13 +225,13 @@
 
             <div class="video-section">
                 <h2 class="video-title">5 Impasse Nirvana</h2>
-                
+
                 <div class="video-container">
                     <div class="video-thumbnail" id="thumbnail">
                         <img src="https://img.youtube.com/vi/8AljwViu68U/maxresdefault.jpg" alt="5 Impasse Nirvana">
                         <div class="play-button"></div>
                     </div>
-                    
+
                     <div class="video-player" id="videoPlayer">
                         <iframe id="youtubeIframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                     </div>
@@ -240,86 +241,66 @@
     </div>
 
     <script>
-const background = document.getElementById('background');
-const textContainer = document.getElementById('textContainer');
-const videoTitle = document.querySelector('.video-title');
-const thumbnail = document.getElementById('thumbnail');
-const videoPlayer = document.getElementById('videoPlayer');
-const youtubeIframe = document.getElementById('youtubeIframe');
+        const background = document.getElementById('background');
+        const textContainer = document.getElementById('textContainer');
+        const videoTitle = document.querySelector('.video-title');
+        const thumbnail = document.getElementById('thumbnail');
+        const videoPlayer = document.getElementById('videoPlayer');
+        const youtubeIframe = document.getElementById('youtubeIframe');
+        const body = document.body;
 
-function updateParallax() {
-    const scrolled = window.pageYOffset;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const scrollPercentage = scrolled / docHeight;
-    const maxScroll = 30;
-    const bgPosition = scrollPercentage * maxScroll;
-    background.style.backgroundPosition = `center ${bgPosition}%`;
-}
-
-window.addEventListener('scroll', updateParallax);
-
-let player; // 🎬 on va créer un vrai lecteur YouTube
-
-// Quand on clique sur la miniature
-thumbnail.addEventListener('click', () => {
-    background.classList.add('dimmed');
-    textContainer.classList.add('dimmed');
-    videoTitle.classList.add('dimmed');
-    thumbnail.style.opacity = '0';
-
-    setTimeout(() => {
-        thumbnail.style.display = 'none';
-        videoPlayer.classList.add('active');
-
-        // Charger le lecteur YouTube via l'API
-        if (!player) {
-            youtubeIframe.src = 'https://www.youtube.com/embed/8AljwViu68U?enablejsapi=1&modestbranding=1&rel=0';
-            player = new YT.Player('youtubeIframe', {
-                events: {
-                    'onStateChange': onPlayerStateChange
-                }
-            });
-        } else {
-            player.playVideo();
+        // Parallaxe du fond
+        function updateParallax() {
+            const scrolled = window.pageYOffset;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercentage = scrolled / docHeight;
+            const maxScroll = 30;
+            const bgPosition = scrollPercentage * maxScroll;
+            background.style.backgroundPosition = `center ${bgPosition}%`;
         }
-    }, 800);
-});
+        window.addEventListener('scroll', updateParallax);
 
-// Fonction appelée par YouTube quand la vidéo change d’état
-function onPlayerStateChange(event) {
-    // 1 = lecture
-    if (event.data === 1) {
-        background.classList.add('dimmed');
-        textContainer.classList.add('dimmed');
-        videoTitle.classList.add('dimmed');
-    }
-    // 2 = pause
-    if (event.data === 2) {
-        background.classList.remove('dimmed');
-        textContainer.classList.remove('dimmed');
-        videoTitle.classList.remove('dimmed');
-    }
-}
+        // Charger l’API YouTube
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        document.body.appendChild(tag);
 
-// Fermeture manuelle (si tu veux garder cette option)
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && videoPlayer.classList.contains('active')) {
-        closeVideo();
-    }
-});
+        let player;
 
-function closeVideo() {
-    videoPlayer.classList.remove('active');
-    youtubeIframe.src = '';
-    background.classList.remove('dimmed');
-    textContainer.classList.remove('dimmed');
-    videoTitle.classList.remove('dimmed');
-    thumbnail.style.display = 'block';
-    setTimeout(() => {
-        thumbnail.style.opacity = '1';
-    }, 10);
-}
+        // Quand on clique sur la miniature
+        thumbnail.addEventListener('click', () => {
+            thumbnail.style.opacity = '0';
+            setTimeout(() => {
+                thumbnail.style.display = 'none';
+                videoPlayer.classList.add('active');
+                if (!player) {
+                    youtubeIframe.src = 'https://www.youtube.com/embed/8AljwViu68U?enablejsapi=1&rel=0&modestbranding=1';
+                    player = new YT.Player('youtubeIframe', {
+                        events: { 'onStateChange': onPlayerStateChange }
+                    });
+                } else {
+                    player.playVideo();
+                }
+            }, 800);
+        });
+
+        // Quand la vidéo change d’état (lecture/pause)
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+                body.classList.add('darken');
+            } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+                body.classList.remove('darken');
+            }
+        }
+
+        // Fermeture manuelle (optionnelle)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && videoPlayer.classList.contains('active')) {
+                player.stopVideo();
+                body.classList.remove('darken');
+            }
+        });
     </script>
-<script src="https://www.youtube.com/iframe_api"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 </html>

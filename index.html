@@ -51,7 +51,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 120px 20px 200px;
+      padding: 120px 20px 200px; /* ⬇️ espace augmenté en bas de page */
     }
 
     /* 🌅 Texte d'intro (fondu sans mouvement) */
@@ -117,7 +117,7 @@
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-      transition: opacity 1s ease;
+      transition: opacity 0.5s ease;
       z-index: 2;
     }
 
@@ -162,7 +162,7 @@
     .video-player iframe {
       width: 100%;
       height: 100%;
-      border: none; /* ✅ supprime la ligne claire */
+      border: none;
       display: block;
     }
 
@@ -203,7 +203,6 @@
       <h2 class="video-title">5 Impasse Nirvana</h2>
 
       <div class="video-container">
-        <!-- Vidéo déjà présente sous la miniature -->
         <div class="video-player" id="videoPlayer">
           <iframe 
             id="youtubeIframe" 
@@ -232,7 +231,7 @@
       const scrollY = window.scrollY;
       const docHeight = document.body.scrollHeight - window.innerHeight;
       const scrollPercent = scrollY / docHeight;
-      background.style.backgroundPosition = `center ${scrollPercent * 80}%`;
+      background.style.backgroundPosition = `center ${scrollPercent * 50}%`; // 
     });
 
     // 📦 Charger l’API YouTube
@@ -240,22 +239,34 @@
     tag.src = "https://www.youtube.com/iframe_api";
     document.body.appendChild(tag);
 
+    // ✅ Préchargement du lecteur YouTube
     function onYouTubeIframeAPIReady() {
       player = new YT.Player('youtubeIframe', {
-        events: { 'onStateChange': onPlayerStateChange }
+        events: {
+          'onReady': (event) => {
+            // Précharge la vidéo silencieusement
+            event.target.mute();
+            event.target.playVideo();
+            setTimeout(() => {
+              event.target.pauseVideo();
+              event.target.seekTo(0);
+            }, 1000);
+          },
+          'onStateChange': onPlayerStateChange
+        }
       });
     }
 
     // ▶️ Clic sur la miniature
     thumbnail.addEventListener('click', () => {
-      body.classList.add('darken'); // assombrir immédiatement
+      body.classList.add('darken');
       thumbnail.style.opacity = '0';
       setTimeout(() => {
         thumbnail.style.display = 'none';
         if (player && player.playVideo) {
-          player.playVideo(); // lance instantanément la vidéo déjà chargée
+          player.playVideo(); // 🚀 démarre instantanément
         }
-      }, 800);
+      }, 300);
     });
 
     // 🌗 Réagit à lecture/pause YouTube

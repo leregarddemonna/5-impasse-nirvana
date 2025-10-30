@@ -49,7 +49,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 80px 20px 60px;
+            padding: 120px 20px 60px;
         }
 
         .text-container {
@@ -60,7 +60,7 @@
             margin-top: 40px;
             opacity: 0;
             animation: fadeIn 2s ease-in forwards;
-            animation-delay: 0.5s;
+            animation-delay: 0s;
             transition: opacity 0.5s ease;
         }
 
@@ -151,7 +151,7 @@
             transform: translate(-50%, -50%);
             width: 0;
             height: 0;
-            border-left: 40px solid #000000;
+            border-left: 40px solid #ffffff;
             border-top: 25px solid transparent;
             border-bottom: 25px solid transparent;
             cursor: pointer;
@@ -240,77 +240,85 @@
     </div>
 
     <script>
-        const background = document.getElementById('background');
-        const textContainer = document.getElementById('textContainer');
-        const videoTitle = document.querySelector('.video-title');
-        const thumbnail = document.getElementById('thumbnail');
-        const videoPlayer = document.getElementById('videoPlayer');
-        const youtubeIframe = document.getElementById('youtubeIframe');
+const background = document.getElementById('background');
+const textContainer = document.getElementById('textContainer');
+const videoTitle = document.querySelector('.video-title');
+const thumbnail = document.getElementById('thumbnail');
+const videoPlayer = document.getElementById('videoPlayer');
+const youtubeIframe = document.getElementById('youtubeIframe');
 
-        function updateParallax() {
-            const scrolled = window.pageYOffset;
-            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const scrollPercentage = scrolled / docHeight;
-            
-            const maxScroll = 30;
-            const bgPosition = scrollPercentage * maxScroll;
-            
-            background.style.backgroundPosition = `center ${bgPosition}%`;
-        }
+function updateParallax() {
+    const scrolled = window.pageYOffset;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollPercentage = scrolled / docHeight;
+    const maxScroll = 30;
+    const bgPosition = scrollPercentage * maxScroll;
+    background.style.backgroundPosition = `center ${bgPosition}%`;
+}
 
-        window.addEventListener('scroll', updateParallax);
+window.addEventListener('scroll', updateParallax);
 
-        thumbnail.addEventListener('click', () => {
-            youtubeIframe.src = 'https://www.youtube.com/embed/8AljwViu68U?autoplay=1&rel=0&modestbranding=1&enablejsapi=1';
-            videoPlayer.classList.add('active');
-            background.classList.add('dimmed');
-            textContainer.classList.add('dimmed');
-            videoTitle.classList.add('dimmed');
-            thumbnail.style.opacity = '0';
-            setTimeout(() => {
-                thumbnail.style.display = 'none';
-            }, 300);
-        });
+let player; // 🎬 on va créer un vrai lecteur YouTube
 
-        window.addEventListener('message', (event) => {
-            try {
-                if (typeof event.data === 'string') {
-                    const data = JSON.parse(event.data);
-                    if (data.event === 'onStateChange') {
-                        // 2 = paused
-                        if (data.info === 2) {
-                            background.classList.remove('dimmed');
-                            textContainer.classList.remove('dimmed');
-                            videoTitle.classList.remove('dimmed');
-                        }
-                        // 1 = playing
-                        else if (data.info === 1) {
-                            background.classList.add('dimmed');
-                            textContainer.classList.add('dimmed');
-                            videoTitle.classList.add('dimmed');
-                        }
-                    }
+// Quand on clique sur la miniature
+thumbnail.addEventListener('click', () => {
+    background.classList.add('dimmed');
+    textContainer.classList.add('dimmed');
+    videoTitle.classList.add('dimmed');
+    thumbnail.style.opacity = '0';
+
+    setTimeout(() => {
+        thumbnail.style.display = 'none';
+        videoPlayer.classList.add('active');
+
+        // Charger le lecteur YouTube via l'API
+        if (!player) {
+            youtubeIframe.src = 'https://www.youtube.com/embed/8AljwViu68U?enablejsapi=1&modestbranding=1&rel=0';
+            player = new YT.Player('youtubeIframe', {
+                events: {
+                    'onStateChange': onPlayerStateChange
                 }
-            } catch (e) {}
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && videoPlayer.classList.contains('active')) {
-                closeVideo();
-            }
-        });
-
-        function closeVideo() {
-            videoPlayer.classList.remove('active');
-            youtubeIframe.src = '';
-            background.classList.remove('dimmed');
-            textContainer.classList.remove('dimmed');
-            videoTitle.classList.remove('dimmed');
-            thumbnail.style.display = 'block';
-            setTimeout(() => {
-                thumbnail.style.opacity = '1';
-            }, 10);
+            });
+        } else {
+            player.playVideo();
         }
+    }, 800);
+});
+
+// Fonction appelée par YouTube quand la vidéo change d’état
+function onPlayerStateChange(event) {
+    // 1 = lecture
+    if (event.data === 1) {
+        background.classList.add('dimmed');
+        textContainer.classList.add('dimmed');
+        videoTitle.classList.add('dimmed');
+    }
+    // 2 = pause
+    if (event.data === 2) {
+        background.classList.remove('dimmed');
+        textContainer.classList.remove('dimmed');
+        videoTitle.classList.remove('dimmed');
+    }
+}
+
+// Fermeture manuelle (si tu veux garder cette option)
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && videoPlayer.classList.contains('active')) {
+        closeVideo();
+    }
+});
+
+function closeVideo() {
+    videoPlayer.classList.remove('active');
+    youtubeIframe.src = '';
+    background.classList.remove('dimmed');
+    textContainer.classList.remove('dimmed');
+    videoTitle.classList.remove('dimmed');
+    thumbnail.style.display = 'block';
+    setTimeout(() => {
+        thumbnail.style.opacity = '1';
+    }, 10);
+}
     </script>
 </body>
 </html>
